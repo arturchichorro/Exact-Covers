@@ -5,21 +5,25 @@ t_matrix = np.array([[0, 0, 1, 0, 1, 1, 0],
                      [0, 1, 1, 0, 0, 1, 0],
                      [1, 0, 0, 1, 0, 0, 0],
                      [0, 1, 0, 0, 0, 0, 1],
-                     [0, 0, 0, 1, 1, 0, 1] 
+                     [0, 0, 0, 1, 1, 0, 1],
+                     [0, 1, 0, 0, 0, 0, 1] 
                     ])
 
 def solve_exact_cover(matrix):
     row_identifiers = np.arange(1, matrix.shape[0] + 1).reshape(-1, 1)
     matrix_with_ids = np.hstack((row_identifiers, matrix))
 
-    return recursive_solver(matrix_with_ids, set())
+    solutions = []
+    recursive_solver(matrix_with_ids, set(), solutions)
+    return solutions
 
-def recursive_solver(matrix, partial_solution):
+def recursive_solver(matrix, partial_solution, solutions):
     rows, columns = matrix.shape
 
     # Base case: if only column with row identifiers remains, found solution
     if columns == 1:
-        return partial_solution
+        solutions.append(partial_solution)
+        return
 
     # Choose column with least 1s
     column_sums = np.sum(matrix[:, 1:], axis=0)
@@ -29,7 +33,7 @@ def recursive_solver(matrix, partial_solution):
 
     # If there aren't any valid rows, there's no solution here
     if not candidate_rows:
-        return None
+        return
 
     for row_idx in candidate_rows:
         new_partial_solution = partial_solution.copy()
@@ -48,11 +52,7 @@ def recursive_solver(matrix, partial_solution):
         reduced_matrix = np.delete(matrix, list(rows_to_delete), axis=0)
         reduced_matrix = np.delete(reduced_matrix, list(columns_to_delete), axis=1)
 
-        result = recursive_solver(reduced_matrix, new_partial_solution)
+        recursive_solver(reduced_matrix, new_partial_solution, solutions)
 
-        if result is not None:
-            return result
-
-    return None
 
 print(solve_exact_cover(t_matrix))
