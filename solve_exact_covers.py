@@ -60,10 +60,34 @@ def _solve(matrix, partial_solution, solutions):
 
         _solve(reduced_matrix, new_partial_solution, solutions)
 
+def sudoku_grid_to_sudoku_string(sudoku_grid):
+    return ''.join(str(cell) if cell != 0 else '.' for row in sudoku_grid for cell in row)
 
-def sudoku_grid_to_exact_cover(sudoku):
+def sudoku_string_to_sudoku_grid(sudoku_string):
+    return np.array([int(char) if char != '.' else 0 for char in sudoku_string]).reshape(9,9)
+
+def print_sudoku_board(sudoku_string):
+    # invalid sudoku string
+    if len(sudoku_string) != 81 or not all(c in '123456789.' for c in sudoku_string):
+        return
+    
+    for i in range(9):
+        row = sudoku_string[i * 9:(i + 1) * 9]
+        formatted_row = " | ".join(row[j:j + 3] for j in range(0, 9, 3))
+        print(formatted_row)
+        if i % 3 == 2 and i < 8:
+            print("-" * 15)
+
+def sudoku_grid_to_exact_cover(sudoku_string):
+    """Translates a sudoku board into a matrix of 1s and 0s to be solved as an Exact Cover problem
+    Inputs: 81 character long string
+    Outputs: numpy matrix of 1s and 0s 
+    
+    Example Input:
+    ".4.6.8...56.9...2.19724.3...8..97..1.3.1.6..5..95.346....35.1.8....6..43.73..96.2"
+    """
+    
     pass
-
 
 t_matrix = np.array([
                      [0, 0, 1, 0, 1, 1, 0],
@@ -74,4 +98,17 @@ t_matrix = np.array([
                      [0, 0, 0, 1, 1, 0, 1],
                     ])
 
-print(solve_exact_cover(t_matrix))
+sudoku_grid_example = np.array([
+    [5, 3, 0, 0, 7, 0, 0, 0, 0],
+    [6, 0, 0, 1, 9, 5, 0, 0, 0],
+    [0, 9, 8, 0, 0, 0, 0, 6, 0],
+    [8, 0, 0, 0, 6, 0, 0, 0, 3],
+    [4, 0, 0, 8, 0, 3, 0, 0, 1],
+    [7, 0, 0, 0, 2, 0, 0, 0, 6],
+    [0, 6, 0, 0, 0, 0, 2, 8, 0],
+    [0, 0, 0, 4, 1, 9, 0, 0, 5],
+    [0, 0, 0, 0, 8, 0, 0, 7, 9]
+])
+
+sudoku_string = ".4.6.8...56.9...2.19724.3...8..97..1.3.1.6..5..95.346....35.1.8....6..43.73..96.2"
+print_sudoku_board(sudoku_string)
