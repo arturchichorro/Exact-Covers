@@ -1,23 +1,29 @@
 import numpy as np
 
-t_matrix = np.array([[0, 0, 1, 0, 1, 1, 0],
+def solve_exact_cover(matrix):
+    """Exact Cover Solver
+    Inputs: numpy matrix of 1s and 0s
+    Outputs: List of sets with rows that are part of solution (1 indexed)
+    
+    Example input:
+    np.array([
+                     [0, 0, 1, 0, 1, 1, 0],
                      [1, 0, 0, 1, 0, 0, 1],
                      [0, 1, 1, 0, 0, 1, 0],
                      [1, 0, 0, 1, 0, 0, 0],
                      [0, 1, 0, 0, 0, 0, 1],
                      [0, 0, 0, 1, 1, 0, 1],
-                     [0, 1, 0, 0, 0, 0, 1] 
                     ])
-
-def solve_exact_cover(matrix):
+    Output: [{1, 4, 5}]
+    """
     row_identifiers = np.arange(1, matrix.shape[0] + 1).reshape(-1, 1)
     matrix_with_ids = np.hstack((row_identifiers, matrix))
 
     solutions = []
-    recursive_solver(matrix_with_ids, set(), solutions)
+    _solve(matrix_with_ids, set(), solutions)
     return solutions
 
-def recursive_solver(matrix, partial_solution, solutions):
+def _solve(matrix, partial_solution, solutions):
     rows, columns = matrix.shape
 
     # Base case: if only column with row identifiers remains, found solution
@@ -52,7 +58,20 @@ def recursive_solver(matrix, partial_solution, solutions):
         reduced_matrix = np.delete(matrix, list(rows_to_delete), axis=0)
         reduced_matrix = np.delete(reduced_matrix, list(columns_to_delete), axis=1)
 
-        recursive_solver(reduced_matrix, new_partial_solution, solutions)
+        _solve(reduced_matrix, new_partial_solution, solutions)
 
+
+def sudoku_grid_to_exact_cover(sudoku):
+    pass
+
+
+t_matrix = np.array([
+                     [0, 0, 1, 0, 1, 1, 0],
+                     [1, 0, 0, 1, 0, 0, 1],
+                     [0, 1, 1, 0, 0, 1, 0],
+                     [1, 0, 0, 1, 0, 0, 0],
+                     [0, 1, 0, 0, 0, 0, 1],
+                     [0, 0, 0, 1, 1, 0, 1],
+                    ])
 
 print(solve_exact_cover(t_matrix))
