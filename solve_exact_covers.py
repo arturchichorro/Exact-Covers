@@ -49,14 +49,12 @@ def _solve(matrix, partial_solution, solutions):
 def choose_row(matrix, row_idx, n_rows, n_columns):
     rows_to_delete = set()
     columns_to_delete = set()
-
     for j in range(1, n_columns):
         if matrix[row_idx, j] == 1:
             columns_to_delete.add(j)
             for i in range(n_rows):
                 if matrix[i, j] == 1:
                     rows_to_delete.add(i)
-
     reduced_matrix = np.delete(matrix, list(rows_to_delete), axis=0)
     return np.delete(reduced_matrix, list(columns_to_delete), axis=1)
 
@@ -90,27 +88,41 @@ def _box_constraint(row:int, size:int) -> int:
             + ((row//(sqrt(size)*size)) % sqrt(size))*size
             + (row % size)))
 
-def empty_sudoku_exact_cover_matrix(size = 9):
+def empty_sudoku_exact_cover(size = 9):
+    """
+    Outputs an empty sudoku board written in a matrix of 1s and 0s.
+    The first column of the matrix is numbering rows and is ignored during the exact cover solving process.
+    """
+    
     constraints, rows = 4 * (size ** 2), size ** 3
     matrix = [] 
     for r in range(rows):
-        row = np.zeros(constraints)
-        positions = [_one_constraint(r, size), _row_constraint(r, size), _col_constraint(r, size), _box_constraint(r, size), ]
+        row = np.zeros(constraints, dtype=int)
+        positions = [
+            _one_constraint(r, size),
+            _row_constraint(r, size), 
+            _col_constraint(r, size), 
+            _box_constraint(r, size)
+        ]
         row[positions] = 1
         matrix.append(row)
 
-    return np.array(matrix, dtype=int)
+    numbered_column = np.arange(1, rows + 1, dtype=int).reshape(-1, 1)
+    return np.hstack((numbered_column, matrix))
 
-def sudoku_grid_to_exact_cover(sudoku_string):
-    """Translates a sudoku board into a matrix of 1s and 0s to be solved as an Exact Cover problem
+def sudoku_to_exact_cover(sudoku_string):
+    """Translates a sudoku 9x9 board into a matrix of 1s and 0s to be solved as an Exact Cover problem
     Inputs: 81 character long string
     Outputs: numpy matrix of 1s and 0s 
     
     Example Input:
     ".4.6.8...56.9...2.19724.3...8..97..1.3.1.6..5..95.346....35.1.8....6..43.73..96.2"
     """
-    for c in sudoku_string:
-        pass
+    empty_sudoku = empty_sudoku_exact_cover()
+    for i, char in enumerate(sudoku_string):
+        if char == ".": continue
+
+        print("i: ", i, " char: ", char, " row: ", (i // 9), " result: ", (i // 9)*81 + (i%9)*9 + int(char))
 
 t_matrix = np.array([
                      [0, 0, 1, 0, 1, 1, 0],
@@ -133,7 +145,12 @@ sudoku_grid_example = np.array([
     [0, 0, 0, 0, 8, 0, 0, 7, 9]
 ])
 
-# sudoku_string = ".4.6.8...56.9...2.19724.3...8..97..1.3.1.6..5..95.346....35.1.8....6..43.73..96.2"
-# print_sudoku_board(sudoku_string)
+sudoku_string = ".4.6.8...56.9...2.19724.3...8..97..1.3.1.6..5..95.346....35.1.8....6..43.73..96.2"
+print_sudoku_board(sudoku_string)
 
-print(len(solve_exact_cover(empty_sudoku_exact_cover_matrix(4))))
+# print(len(solve_exact_cover(empty_sudoku_exact_cover(4))))
+
+sudoku_to_exact_cover(sudoku_string)
+
+matrix = empty_sudoku_exact_cover(9)
+print(matrix[:, 0])
