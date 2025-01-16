@@ -43,10 +43,12 @@ def _solve(matrix, partial_solution, solutions):
     for row_idx in candidate_rows:
         new_partial_solution = partial_solution.copy()
         new_partial_solution.add(matrix[row_idx, 0])
-        reduced_matrix = choose_row(matrix, row_idx, rows, columns)
+        reduced_matrix = choose_row(matrix, row_idx)
         _solve(reduced_matrix, new_partial_solution, solutions)
 
-def choose_row(matrix, row_idx, n_rows, n_columns):
+def choose_row(matrix, row_idx):
+    n_rows, n_columns = matrix.shape
+    
     rows_to_delete = set()
     columns_to_delete = set()
     for j in range(1, n_columns):
@@ -93,7 +95,6 @@ def empty_sudoku_exact_cover(size = 9):
     Outputs an empty sudoku board written in a matrix of 1s and 0s.
     The first column of the matrix is numbering rows and is ignored during the exact cover solving process.
     """
-    
     constraints, rows = 4 * (size ** 2), size ** 3
     matrix = [] 
     for r in range(rows):
@@ -118,11 +119,30 @@ def sudoku_to_exact_cover(sudoku_string):
     Example Input:
     ".4.6.8...56.9...2.19724.3...8..97..1.3.1.6..5..95.346....35.1.8....6..43.73..96.2"
     """
+    size = int(sqrt(len(sudoku_string)))
+    
+    if size != 9: return # For now, just to make sure we're working with 9x9 sudokus
+
     empty_sudoku = empty_sudoku_exact_cover()
+    partial_solution = set()
     for i, char in enumerate(sudoku_string):
         if char == ".": continue
 
-        print("i: ", i, " char: ", char, " row: ", (i // 9), " result: ", (i // 9)*81 + (i%9)*9 + int(char))
+        row_id = (i // 9)*81 + (i%9)*9 + int(char)
+        partial_solution.add(row_id)
+
+    sudoku_matrix = empty_sudoku.copy()
+    for row_id in partial_solution:
+        # Here we need to turn row_id into the actual row_idx where that id is
+        sudoku_matrix = choose_row(sudoku_matrix, np.where(sudoku_matrix[:, 0] == row_id)[0][0])
+
+    return sudoku_matrix, partial_solution
+
+def solve_sudoku_exact_cover(sudoku_string):
+    sudoku_matrix, partial_solution = sudoku_to_exact_cover(sudoku_string) 
+    solutions = []
+    _solve(sudoku_matrix, partial_solution, solutions)
+    return solutions
 
 t_matrix = np.array([
                      [0, 0, 1, 0, 1, 1, 0],
@@ -146,11 +166,5 @@ sudoku_grid_example = np.array([
 ])
 
 sudoku_string = ".4.6.8...56.9...2.19724.3...8..97..1.3.1.6..5..95.346....35.1.8....6..43.73..96.2"
-print_sudoku_board(sudoku_string)
 
-# print(len(solve_exact_cover(empty_sudoku_exact_cover(4))))
-
-sudoku_to_exact_cover(sudoku_string)
-
-matrix = empty_sudoku_exact_cover(9)
-print(matrix[:, 0])
+print(solve_sudoku_exact_cover(sudoku_string))
