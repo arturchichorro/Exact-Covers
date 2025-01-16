@@ -1,3 +1,4 @@
+from math import sqrt
 import numpy as np
 
 def solve_exact_cover(matrix):
@@ -16,6 +17,8 @@ def solve_exact_cover(matrix):
                     ])
     Output: [{1, 4, 5}]
     """
+
+    # Add identifier label to each row 
     row_identifiers = np.arange(1, matrix.shape[0] + 1).reshape(-1, 1)
     matrix_with_ids = np.hstack((row_identifiers, matrix))
 
@@ -30,7 +33,6 @@ def _solve(matrix, partial_solution, solutions):
     if columns == 1:
         solutions.append(partial_solution)
         return
-
     # Choose column with least 1s
     column_sums = np.sum(matrix[:, 1:], axis=0)
     min_col_idx = np.argmin(column_sums) + 1
@@ -78,6 +80,29 @@ def print_sudoku_board(sudoku_string):
         if i % 3 == 2 and i < 8:
             print("-" * 15)
 
+def _one_constraint(row: int, size:int) -> int:
+    return row//size
+def _row_constraint(row:int, size:int) -> int:
+    return size**2 + size*(row//(size**2)) + row % size
+def _col_constraint(row:int, size:int) -> int:
+    return 2*(size**2) + (row % (size**2))
+def _box_constraint(row:int, size:int) -> int:
+    return (int(3*(size**2)
+            + (row//(sqrt(size)*size**2))*(size*sqrt(size))
+            + ((row//(sqrt(size)*size)) % sqrt(size))*size
+            + (row % size)))
+
+def empty_sudoku_exact_cover_matrix(size = 9):
+    constraints, rows = 4 * (size ** 2), size ** 3
+    matrix = [] 
+    for r in range(rows):
+        row = np.zeros(constraints)
+        positions = [_one_constraint(r, size), _row_constraint(r, size), _col_constraint(r, size), _box_constraint(r, size), ]
+        row[positions] = 1
+        matrix.append(row)
+
+    return np.array(matrix, dtype=int)
+
 def sudoku_grid_to_exact_cover(sudoku_string):
     """Translates a sudoku board into a matrix of 1s and 0s to be solved as an Exact Cover problem
     Inputs: 81 character long string
@@ -86,8 +111,10 @@ def sudoku_grid_to_exact_cover(sudoku_string):
     Example Input:
     ".4.6.8...56.9...2.19724.3...8..97..1.3.1.6..5..95.346....35.1.8....6..43.73..96.2"
     """
+
+    for c in sudoku_string:
+        pass
     
-    pass
 
 t_matrix = np.array([
                      [0, 0, 1, 0, 1, 1, 0],
@@ -112,3 +139,9 @@ sudoku_grid_example = np.array([
 
 sudoku_string = ".4.6.8...56.9...2.19724.3...8..97..1.3.1.6..5..95.346....35.1.8....6..43.73..96.2"
 print_sudoku_board(sudoku_string)
+
+empty_sudoku_exact_cover = empty_sudoku_exact_cover_matrix(4)
+
+for row in empty_sudoku_exact_cover:
+    print(row[15:31])
+
