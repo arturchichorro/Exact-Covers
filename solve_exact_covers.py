@@ -28,7 +28,6 @@ def solve_exact_cover(matrix):
 
 def _solve(matrix, partial_solution, solutions):
     rows, columns = matrix.shape
-
     # Base case: if only column with row identifiers remains, found solution
     if columns == 1:
         solutions.append(partial_solution)
@@ -36,31 +35,30 @@ def _solve(matrix, partial_solution, solutions):
     # Choose column with least 1s
     column_sums = np.sum(matrix[:, 1:], axis=0)
     min_col_idx = np.argmin(column_sums) + 1
-
     candidate_rows = [r for r in range(rows) if matrix[r, min_col_idx] == 1]
-
+    
     # If there aren't any valid rows, there's no solution here
     if not candidate_rows:
         return
-
     for row_idx in candidate_rows:
         new_partial_solution = partial_solution.copy()
         new_partial_solution.add(matrix[row_idx, 0])
-
-        rows_to_delete = set()
-        columns_to_delete = set()
-
-        for j in range(1, columns):
-            if matrix[row_idx, j] == 1:
-                columns_to_delete.add(j)
-                for i in range(rows):
-                    if matrix[i, j] == 1:
-                        rows_to_delete.add(i)
-
-        reduced_matrix = np.delete(matrix, list(rows_to_delete), axis=0)
-        reduced_matrix = np.delete(reduced_matrix, list(columns_to_delete), axis=1)
-
+        reduced_matrix = choose_row(matrix, row_idx, rows, columns)
         _solve(reduced_matrix, new_partial_solution, solutions)
+
+def choose_row(matrix, row_idx, n_rows, n_columns):
+    rows_to_delete = set()
+    columns_to_delete = set()
+
+    for j in range(1, n_columns):
+        if matrix[row_idx, j] == 1:
+            columns_to_delete.add(j)
+            for i in range(n_rows):
+                if matrix[i, j] == 1:
+                    rows_to_delete.add(i)
+
+    reduced_matrix = np.delete(matrix, list(rows_to_delete), axis=0)
+    return np.delete(reduced_matrix, list(columns_to_delete), axis=1)
 
 def sudoku_grid_to_sudoku_string(sudoku_grid):
     return ''.join(str(cell) if cell != 0 else '.' for row in sudoku_grid for cell in row)
@@ -111,10 +109,8 @@ def sudoku_grid_to_exact_cover(sudoku_string):
     Example Input:
     ".4.6.8...56.9...2.19724.3...8..97..1.3.1.6..5..95.346....35.1.8....6..43.73..96.2"
     """
-
     for c in sudoku_string:
         pass
-    
 
 t_matrix = np.array([
                      [0, 0, 1, 0, 1, 1, 0],
@@ -137,11 +133,7 @@ sudoku_grid_example = np.array([
     [0, 0, 0, 0, 8, 0, 0, 7, 9]
 ])
 
-sudoku_string = ".4.6.8...56.9...2.19724.3...8..97..1.3.1.6..5..95.346....35.1.8....6..43.73..96.2"
-print_sudoku_board(sudoku_string)
+# sudoku_string = ".4.6.8...56.9...2.19724.3...8..97..1.3.1.6..5..95.346....35.1.8....6..43.73..96.2"
+# print_sudoku_board(sudoku_string)
 
-empty_sudoku_exact_cover = empty_sudoku_exact_cover_matrix(4)
-
-for row in empty_sudoku_exact_cover:
-    print(row[15:31])
-
+print(len(solve_exact_cover(empty_sudoku_exact_cover_matrix(4))))
