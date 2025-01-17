@@ -1,5 +1,6 @@
 from math import sqrt
 import numpy as np
+import time
 
 def solve_exact_cover(matrix):
     """Exact Cover Solver
@@ -144,6 +145,24 @@ def solve_sudoku_exact_cover(sudoku_string):
     _solve(sudoku_matrix, partial_solution, solutions)
     return solutions
 
+def translate_solution_to_sudoku(solutions):
+    """
+    Input is a list of sets containing numbers (chosen rows in exact cover solution). Each set is a possible solution
+    Output is a list of complete sudoku strings (one for each solution)
+    """
+    result = []
+    for sol in solutions:
+        sudo_string = ""
+        sorted_sol = sorted(sol)
+        for i, e in enumerate(sorted_sol):
+            if i == 0:
+                sudo_string += str(e)
+                continue
+            sudo_string += str(e % (9*i)) if e % (9*i) != 0 else "9"
+        result.append(sudo_string)
+    
+    return result
+
 t_matrix = np.array([
                      [0, 0, 1, 0, 1, 1, 0],
                      [1, 0, 0, 1, 0, 0, 1],
@@ -166,5 +185,14 @@ sudoku_grid_example = np.array([
 ])
 
 sudoku_string = ".4.6.8...56.9...2.19724.3...8..97..1.3.1.6..5..95.346....35.1.8....6..43.73..96.2"
+sudoku_string2 = "2.6.51.7.5.87.6..94.......1.49..58..375.481..82.3.97.51..6..9....48.32..7.2.....3"
 
-print(solve_sudoku_exact_cover(sudoku_string))
+# start_time = time.time()
+# print(solve_sudoku_exact_cover(sudoku_string))
+# end_time = time.time()
+
+# print(end_time - start_time, "seconds")
+sudoku_sols = [i for input_data in [sudoku_string, sudoku_string2] for i in translate_solution_to_sudoku(solve_sudoku_exact_cover(input_data))]
+
+for sol in sudoku_sols:
+    print_sudoku_board(sol)
