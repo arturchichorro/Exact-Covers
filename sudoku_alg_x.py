@@ -1,7 +1,7 @@
 import numpy as np
 from math import sqrt
 from alg_x import solve, choose_row
-from sudoku_helper import print_sudoku_board
+from sudoku_helper import print_sudoku_string
 import time
 
 def _one_constraint(row, size):
@@ -115,6 +115,6 @@ sudoku_sols = [i for input_data in [counter_backtracking_sudoku] for i in transl
 end_time = time.time()
 
 for sol in sudoku_sols:
-    print_sudoku_board(sol)
+    print_sudoku_string(sol)
 
 print(end_time - start_time, "seconds")
