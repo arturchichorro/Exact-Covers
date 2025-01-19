@@ -1,23 +1,8 @@
 import numpy as np
 from math import sqrt
-from alg_x import solve_exact_cover, solve, choose_row
-
-def sudoku_grid_to_sudoku_string(sudoku_grid):
-    return ''.join(str(cell) if cell != 0 else '.' for row in sudoku_grid for cell in row)
-
-def sudoku_string_to_sudoku_grid(sudoku_string):
-    return np.array([int(char) if char != '.' else 0 for char in sudoku_string]).reshape(9, 9)
-
-def print_sudoku_board(sudoku_string):
-    if len(sudoku_string) != 81 or not all(c in '123456789.' for c in sudoku_string):
-        return
-    
-    for i in range(9):
-        row = sudoku_string[i * 9:(i + 1) * 9]
-        formatted_row = " | ".join(row[j:j + 3] for j in range(0, 9, 3))
-        print(formatted_row)
-        if i % 3 == 2 and i < 8:
-            print("-" * 15)
+from alg_x import solve, choose_row
+from sudoku_helper import print_sudoku_board
+import time
 
 def _one_constraint(row, size):
     return row // size
@@ -115,13 +100,21 @@ sudoku_grid_example = np.array([
 sudoku_string = ".4.6.8...56.9...2.19724.3...8..97..1.3.1.6..5..95.346....35.1.8....6..43.73..96.2"
 sudoku_string2 = "2.6.51.7.5.87.6..94.......1.49..58..375.481..82.3.97.51..6..9....48.32..7.2.....3"
 diabolical_sudoku = "..43......5...91.4...1....6......8..61..9...5..8.23......2.753.5.....6.7...4.5..."
+extreme_sudoku = "7..1....9.2.3..7..4.9.......6.8..2............7...1.5......49...46..5..2.1...68.."
+hardest_sudoku = "...1.2....6.....7...8...9..4.......3.5...7...2...8...1..9...8.5.7.....6....3.4..."
+unsolvable_sudoku = ".16.8..4....5.3...3...2......3...96.7.......8.49...3..........1...9.5....3..4265."
+counter_backtracking_sudoku = "4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......"
+
 
 # start_time = time.time()
 # print(solve_sudoku_exact_cover(sudoku_string))
 # end_time = time.time()
 
-# print(end_time - start_time, "seconds")
-sudoku_sols = [i for input_data in [diabolical_sudoku] for i in translate_solution_to_sudoku(solve_sudoku_exact_cover(input_data))]
+start_time = time.time()
+sudoku_sols = [i for input_data in [counter_backtracking_sudoku] for i in translate_solution_to_sudoku(solve_sudoku_exact_cover(input_data))]
+end_time = time.time()
 
 for sol in sudoku_sols:
     print_sudoku_board(sol)
+
+print(end_time - start_time, "seconds")
