@@ -1,7 +1,7 @@
 # To do
 
-- [ ] Benchmark file that runs both alg_x algorithm and backtracking
-- [ ] Matplotlib graphs about times for each sudoku string
+- [x] Benchmark file that runs both alg_x algorithm and backtracking
+- [x] Matplotlib graphs about times for each sudoku string
 - [ ] Sudoku generation function
 - [ ] Collect big sudoku dataset
 - [ ] Implement DLX

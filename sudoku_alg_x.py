@@ -1,8 +1,6 @@
 import numpy as np
 from math import sqrt
 from alg_x import solve, choose_row
-from sudoku_helper import print_sudoku_string
-import time
 
 def _one_constraint(row, size):
     return row // size
@@ -36,7 +34,7 @@ def empty_sudoku_exact_cover(size=9):
     numbered_column = np.arange(1, rows + 1, dtype=int).reshape(-1, 1)
     return np.hstack((numbered_column, matrix))
 
-def sudoku_to_exact_cover(sudoku_string):
+def sudoku_string_to_exact_cover(sudoku_string):
     size = int(sqrt(len(sudoku_string)))
     if size != 9:
         return
@@ -56,8 +54,30 @@ def sudoku_to_exact_cover(sudoku_string):
 
     return sudoku_matrix, partial_solution
 
+def sudoku_to_exact_cover_matrix(sudoku_matrix):
+    size = sudoku_matrix.shape[0]
+    if size != 9 or sudoku_matrix.shape[1] != 9:
+        return
+    empty_sudoku = empty_sudoku_exact_cover()
+    partial_solution = set()
+
+    for row in range(9):
+        for col in range(9):
+            num = sudoku_matrix[row, col]
+            if num == 0:
+                continue
+
+            row_id = row * 81 + col * 9 + num
+            partial_solution.add(row_id)
+
+    sudoku_exact_cover = empty_sudoku.copy()
+    for row_id in partial_solution:
+        sudoku_exact_cover = choose_row(sudoku_exact_cover, np.where(sudoku_exact_cover[:, 0] == row_id)[0][0])
+
+    return sudoku_exact_cover, partial_solution
+
 def solve_sudoku_exact_cover(sudoku_string):
-    sudoku_matrix, partial_solution = sudoku_to_exact_cover(sudoku_string)
+    sudoku_matrix, partial_solution = sudoku_string_to_exact_cover(sudoku_string)
     solutions = []
     solve(sudoku_matrix, partial_solution, solutions)
     return solutions

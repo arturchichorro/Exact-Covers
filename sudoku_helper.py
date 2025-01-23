@@ -1,4 +1,5 @@
 import numpy as np
+import random
 
 def sudoku_grid_to_sudoku_string(sudoku_grid):
     return ''.join(str(cell) if cell != 0 else '.' for row in sudoku_grid for cell in row)
@@ -26,3 +27,34 @@ def print_sudoku_grid(sudoku_grid):
         print(formatted_row)
         if i % 3 == 2 and i < 8:
             print("-" * 15)
+
+def is_valid_placement(sudoku_grid, row, col, num):
+        if num in sudoku_grid[row, :]:
+            return False
+        if num in sudoku_grid[:, col]:
+            return False
+        start_row, start_col = 3 * (row // 3), 3 * (col // 3)
+        if num in sudoku_grid[start_row:start_row+3, start_col:start_col+3]:
+            return False
+        return True
+
+def generate_filled_sudoku():
+    """Generate a fully filled Sudoku board."""
+    def fill_grid(grid):
+        """Fill the grid recursively using backtracking."""
+        for row in range(9):
+            for col in range(9):
+                if grid[row, col] == 0:
+                    random_numbers = random.sample(range(1, 10), 9)
+                    for num in random_numbers:
+                        if is_valid_placement(grid, row, col, num):
+                            grid[row, col] = num
+                            if fill_grid(grid):
+                                return True
+                            grid[row, col] = 0
+                    return False
+        return True
+
+    grid = np.zeros((9, 9), dtype=int)
+    fill_grid(grid)
+    return grid

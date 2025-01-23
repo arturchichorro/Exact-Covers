@@ -2,15 +2,13 @@ import numpy as np
 import time
 import matplotlib.pyplot as plt
 from sudoku_alg_x import translate_solution_to_sudoku, solve_sudoku_exact_cover
-from sudoku_backtracking import sudoku_string_to_sudoku_grid, solve_sudoku_backtracking
-from sudoku_helper import print_sudoku_string, print_sudoku_grid
+from sudoku_backtracking import solve_sudoku_backtracking
+from sudoku_helper import sudoku_string_to_sudoku_grid, print_sudoku_string, print_sudoku_grid
 
 
 def benchmark_sudokus(sudoku_strings):
-
     backtrack_times = []
     alg_x_times = []
-
     for method in ["Backtracking", "Algorithm X"]:
         print("Method: ", method)
         for i, sudoku_string in enumerate(sudoku_strings):
@@ -26,7 +24,6 @@ def benchmark_sudokus(sudoku_strings):
                 end_time = time.time()
                 alg_x_times.append(end_time - start_time)
             print("Solved: ", i+1, "/", len(sudoku_strings))
-
     return backtrack_times, alg_x_times
 
 def plot_benchmark_results(sudoku_strings, backtrack_times, alg_x_times):
@@ -51,6 +48,8 @@ extreme_sudoku = "7..1....9.2.3..7..4.9.......6.8..2............7...1.5......49.
 hardest_sudoku = "...1.2....6.....7...8...9..4.......3.5...7...2...8...1..9...8.5.7.....6....3.4..."
 very_hard_sudoku = ".16.8..4....5.3...3...2......3...96.7.......8.49...3..........1...9.5....3..4265."
 counter_backtracking_sudoku = "4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......"
+hard_sudoku1 = ".7.1.........8.4....3.6.....1...6......5...984...21.5.......7.9...3.4.1..69.....3"
+invalid_sudoku = "11.6.8...56.9...2.19724.3...8..97..1.3.1.6..5..95.346....35.1.8....6..43.73..96.2"
 
 sudoku_string_arr = [
     sudoku_string,
@@ -63,4 +62,8 @@ sudoku_string_arr = [
 ]
 
 backtrack_times, alg_x_times = benchmark_sudokus(sudoku_string_arr)
+print(backtrack_times, alg_x_times)
 plot_benchmark_results(sudoku_string_arr, backtrack_times, alg_x_times)
+
+# for sol in translate_solution_to_sudoku(solve_sudoku_exact_cover(invalid_sudoku)):
+#     print_sudoku_string(sol)
