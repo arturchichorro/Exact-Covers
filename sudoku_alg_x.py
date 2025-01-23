@@ -54,7 +54,7 @@ def sudoku_string_to_exact_cover(sudoku_string):
 
     return sudoku_matrix, partial_solution
 
-def sudoku_to_exact_cover_matrix(sudoku_matrix):
+def sudoku_matrix_to_exact_cover(sudoku_matrix):
     size = sudoku_matrix.shape[0]
     if size != 9 or sudoku_matrix.shape[1] != 9:
         return
