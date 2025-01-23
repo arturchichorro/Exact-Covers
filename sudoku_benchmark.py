@@ -76,7 +76,7 @@ invalid_sudoku = "11.6.8...56.9...2.19724.3...8..97..1.3.1.6..5..95.346....35.1.
 #     # counter_backtracking_sudoku,
 # ]
 
-with open("t_output.txt", "r") as file:
+with open("output.txt", "r") as file:
     sudoku_strings = [line.strip() for line in file if line.strip()]
 
 print(sudoku_strings)
