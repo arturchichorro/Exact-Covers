@@ -38,4 +38,4 @@ def generate_sudoku_to_txt(n, filename):
             puzzle = sudoku_grid_to_sudoku_string(generate_sudoku_puzzle())
             f.write(puzzle + '\n')
 
-generate_sudoku_to_txt(100, "output.txt")
+generate_sudoku_to_txt(5, "t_output.txt")

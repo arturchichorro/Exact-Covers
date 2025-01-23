@@ -9,30 +9,45 @@ from sudoku_helper import sudoku_string_to_sudoku_grid, print_sudoku_string, pri
 def benchmark_sudokus(sudoku_strings):
     backtrack_times = []
     alg_x_times = []
-    for method in ["Backtracking", "Algorithm X"]:
-        print("Method: ", method)
-        for i, sudoku_string in enumerate(sudoku_strings):
-            if method == "Backtracking":
-                start_time = time.time()
-                grid = sudoku_string_to_sudoku_grid(sudoku_string)
-                solve_sudoku_backtracking(grid)
-                end_time = time.time()
-                backtrack_times.append(end_time - start_time)
-            else:
-                start_time = time.time()
-                translate_solution_to_sudoku(solve_sudoku_string_exact_cover(sudoku_string))
-                end_time = time.time()
-                alg_x_times.append(end_time - start_time)
-            print("Solved: ", i+1, "/", len(sudoku_strings))
+    
+    print("Benchmarking Backtracking...")
+    for i, sudoku_string in enumerate(sudoku_strings):
+        start_time = time.perf_counter()
+        grid = sudoku_string_to_sudoku_grid(sudoku_string)
+        solve_sudoku_backtracking(grid)
+        end_time = time.perf_counter()
+        backtrack_times.append(end_time - start_time)
+        print("Solved: ", i+1, "/", len(sudoku_strings))
+
+    print("Benchmarking Alg X...")
+    for i, sudoku_string in enumerate(sudoku_strings):
+        start_time = time.perf_counter()
+        translate_solution_to_sudoku(solve_sudoku_string_exact_cover(sudoku_string))
+        end_time = time.perf_counter()
+        alg_x_times.append(end_time - start_time)
+        print("Solved: ", i+1, "/", len(sudoku_strings))
+    
     return backtrack_times, alg_x_times
 
 def plot_benchmark_results(sudoku_strings, backtrack_times, alg_x_times):
-    x_labels = [f"Sudoku {i + 1}" for i in range(len(sudoku_strings))]
-    x_positions = range(len(sudoku_strings))
-    
+    """Plot benchmark results for Sudoku solving methods."""
+    num_sudokus = len(sudoku_strings)
+    x_positions = range(num_sudokus)
+    bar_width = 0.4
+
+    if num_sudokus > 20:
+        print("Aggregating results for visualization...")
+        batch_size = max(num_sudokus // 20, 1)
+        x_labels = [f"{i * batch_size + 1}-{(i + 1) * batch_size}" for i in range(len(backtrack_times) // batch_size)]
+        backtrack_times = [sum(backtrack_times[i:i+batch_size]) / batch_size for i in range(0, num_sudokus, batch_size)]
+        alg_x_times = [sum(alg_x_times[i:i+batch_size]) / batch_size for i in range(0, num_sudokus, batch_size)]
+        x_positions = range(len(backtrack_times))
+    else:
+        x_labels = [f"Sudoku {i + 1}" for i in range(num_sudokus)]
+
     plt.figure(figsize=(10, 6))
-    plt.bar([x - 0.2 for x in x_positions], backtrack_times, width=0.4, label="Backtracking", color="blue")
-    plt.bar([x + 0.2 for x in x_positions], alg_x_times, width=0.4, label="Algorithm X", color="orange")
+    plt.bar([x - bar_width / 2 for x in x_positions], backtrack_times, width=bar_width, label="Backtracking", color="blue")
+    plt.bar([x + bar_width / 2 for x in x_positions], alg_x_times, width=bar_width, label="Algorithm X", color="orange")
     plt.xticks(x_positions, x_labels, rotation=45, ha="right")
     plt.xlabel("Sudoku Strings")
     plt.ylabel("Time (seconds)")
@@ -51,19 +66,24 @@ counter_backtracking_sudoku = "4.....8.5.3..........7......2.....6.....8.4......
 hard_sudoku1 = ".7.1.........8.4....3.6.....1...6......5...984...21.5.......7.9...3.4.1..69.....3"
 invalid_sudoku = "11.6.8...56.9...2.19724.3...8..97..1.3.1.6..5..95.346....35.1.8....6..43.73..96.2"
 
-sudoku_string_arr = [
-    sudoku_string,
-    sudoku_string2,
-    diabolical_sudoku,
-    extreme_sudoku,
-    # hardest_sudoku,
-    very_hard_sudoku,
-    # counter_backtracking_sudoku,
-]
+# sudoku_string_arr = [
+#     sudoku_string,
+#     sudoku_string2,
+#     diabolical_sudoku,
+#     extreme_sudoku,
+#     # hardest_sudoku,
+#     very_hard_sudoku,
+#     # counter_backtracking_sudoku,
+# ]
 
-backtrack_times, alg_x_times = benchmark_sudokus(sudoku_string_arr)
+with open("t_output.txt", "r") as file:
+    sudoku_strings = [line.strip() for line in file if line.strip()]
+
+print(sudoku_strings)
+
+backtrack_times, alg_x_times = benchmark_sudokus(sudoku_strings)
 print(backtrack_times, alg_x_times)
-plot_benchmark_results(sudoku_string_arr, backtrack_times, alg_x_times)
+plot_benchmark_results(sudoku_strings, backtrack_times, alg_x_times)
 
 # for sol in translate_solution_to_sudoku(solve_sudoku_string_exact_cover(invalid_sudoku)):
 #     print_sudoku_string(sol)
