@@ -76,8 +76,14 @@ def sudoku_matrix_to_exact_cover(sudoku_matrix):
 
     return sudoku_exact_cover, partial_solution
 
-def solve_sudoku_exact_cover(sudoku_string):
+def solve_sudoku_string_exact_cover(sudoku_string):
     sudoku_matrix, partial_solution = sudoku_string_to_exact_cover(sudoku_string)
+    solutions = []
+    solve(sudoku_matrix, partial_solution, solutions)
+    return solutions
+
+def solve_sudoku_matrix_exact_cover(sudoku_grid):
+    sudoku_matrix, partial_solution = sudoku_matrix_to_exact_cover(sudoku_grid)
     solutions = []
     solve(sudoku_matrix, partial_solution, solutions)
     return solutions

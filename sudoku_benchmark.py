@@ -1,7 +1,7 @@
 import numpy as np
 import time
 import matplotlib.pyplot as plt
-from sudoku_alg_x import translate_solution_to_sudoku, solve_sudoku_exact_cover
+from sudoku_alg_x import translate_solution_to_sudoku, solve_sudoku_string_exact_cover
 from sudoku_backtracking import solve_sudoku_backtracking
 from sudoku_helper import sudoku_string_to_sudoku_grid, print_sudoku_string, print_sudoku_grid
 
@@ -20,7 +20,7 @@ def benchmark_sudokus(sudoku_strings):
                 backtrack_times.append(end_time - start_time)
             else:
                 start_time = time.time()
-                translate_solution_to_sudoku(solve_sudoku_exact_cover(sudoku_string))
+                translate_solution_to_sudoku(solve_sudoku_string_exact_cover(sudoku_string))
                 end_time = time.time()
                 alg_x_times.append(end_time - start_time)
             print("Solved: ", i+1, "/", len(sudoku_strings))
@@ -65,5 +65,5 @@ backtrack_times, alg_x_times = benchmark_sudokus(sudoku_string_arr)
 print(backtrack_times, alg_x_times)
 plot_benchmark_results(sudoku_string_arr, backtrack_times, alg_x_times)
 
-# for sol in translate_solution_to_sudoku(solve_sudoku_exact_cover(invalid_sudoku)):
+# for sol in translate_solution_to_sudoku(solve_sudoku_string_exact_cover(invalid_sudoku)):
 #     print_sudoku_string(sol)
