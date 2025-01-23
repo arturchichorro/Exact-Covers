@@ -1,10 +1,6 @@
 from sudoku_alg_x import solve_sudoku_matrix_exact_cover, translate_solution_to_sudoku
-from sudoku_helper import generate_filled_sudoku, print_sudoku_grid
+from sudoku_helper import generate_filled_sudoku, print_sudoku_grid, sudoku_grid_to_sudoku_string
 import random
-
-# 1. Generate filled sudoku
-# 2. Remove numbers
-# 3. Check if len(solutions) == 1
 
 def count_non_zero_elements(grid):
     count = 0
@@ -35,6 +31,11 @@ def generate_sudoku_puzzle(threshold=40):
 
     return sudoku_grid
 
-grid = generate_sudoku_puzzle()
-print(translate_solution_to_sudoku(solve_sudoku_matrix_exact_cover(grid)), count_non_zero_elements(grid))
-print_sudoku_grid(grid)
+def generate_sudoku_to_txt(n, filename):
+    with open(filename, 'w') as f:
+        for i in range(n):
+            print("Generating puzzle " + str(i + 1) + "...")
+            puzzle = sudoku_grid_to_sudoku_string(generate_sudoku_puzzle())
+            f.write(puzzle + '\n')
+
+generate_sudoku_to_txt(100, "output.txt")
