@@ -68,12 +68,12 @@ invalid_sudoku = "11.6.8...56.9...2.19724.3...8..97..1.3.1.6..5..95.346....35.1.
 
 sudoku_strings = [
     # sudoku_string,
-    # sudoku_string2,
+    sudoku_string2,
     # diabolical_sudoku,
     # extreme_sudoku,
     # hardest_sudoku,
     # very_hard_sudoku,
-    counter_backtracking_sudoku,
+    # counter_backtracking_sudoku,
 ]
 
 # with open("200.txt", "r") as file:
