@@ -26,16 +26,16 @@ def generate_sudoku_puzzle(threshold=40):
         row, col, num = previous
         sudoku_grid[row, col] = num
 
-        if count_non_zero_elements(sudoku_grid) < threshold:
+        if count_non_zero_elements(sudoku_grid) <= threshold:
             break
 
     return sudoku_grid
 
-def generate_sudoku_to_txt(n, filename):
+def generate_sudoku_to_txt(n, filename, threshold):
     with open(filename, 'w') as f:
         for i in range(n):
             print("Generating puzzle " + str(i + 1) + "...")
-            puzzle = sudoku_grid_to_sudoku_string(generate_sudoku_puzzle())
+            puzzle = sudoku_grid_to_sudoku_string(generate_sudoku_puzzle(threshold))
             f.write(puzzle + '\n')
 
-generate_sudoku_to_txt(5, "t_output.txt")
+generate_sudoku_to_txt(200, "200.txt", 200)

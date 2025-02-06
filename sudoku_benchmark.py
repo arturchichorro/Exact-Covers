@@ -66,18 +66,18 @@ counter_backtracking_sudoku = "4.....8.5.3..........7......2.....6.....8.4......
 hard_sudoku1 = ".7.1.........8.4....3.6.....1...6......5...984...21.5.......7.9...3.4.1..69.....3"
 invalid_sudoku = "11.6.8...56.9...2.19724.3...8..97..1.3.1.6..5..95.346....35.1.8....6..43.73..96.2"
 
-# sudoku_string_arr = [
-#     sudoku_string,
-#     sudoku_string2,
-#     diabolical_sudoku,
-#     extreme_sudoku,
-#     # hardest_sudoku,
-#     very_hard_sudoku,
-#     # counter_backtracking_sudoku,
-# ]
+sudoku_strings = [
+    # sudoku_string,
+    # sudoku_string2,
+    # diabolical_sudoku,
+    # extreme_sudoku,
+    # hardest_sudoku,
+    # very_hard_sudoku,
+    counter_backtracking_sudoku,
+]
 
-with open("output.txt", "r") as file:
-    sudoku_strings = [line.strip() for line in file if line.strip()]
+# with open("200.txt", "r") as file:
+#     sudoku_strings = [line.strip() for line in file if line.strip()]
 
 print(sudoku_strings)
 
