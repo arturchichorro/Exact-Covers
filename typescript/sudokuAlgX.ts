@@ -85,7 +85,7 @@ function sudokuMatrixToExactCover(sudokuMatrix: number[][]): [npMatrix, Set<numb
             partialSolution.add(rowId);
         }
     }
-    let sudokuExactCover = [...emptySudoku];
+    const sudokuExactCover = [...emptySudoku];
     let sudokuNpMatrix: npMatrix = {
         data: sudokuExactCover,
         numRows: sudokuExactCover.length,
