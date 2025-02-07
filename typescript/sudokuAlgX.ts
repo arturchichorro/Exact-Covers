@@ -127,5 +127,3 @@ function translateSolutionToSudoku(solutions: Set<number>[]): string[] {
         return sudoString;
     });
 }
-
-console.log(translateSolutionToSudoku(solveSudokuStringExactCover(".4.6.8...56.9...2.19724.3...8..97..1.3.1.6..5..95.346....35.1.8....6..43.73..96.2")))

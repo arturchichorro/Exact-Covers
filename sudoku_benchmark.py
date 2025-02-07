@@ -3,7 +3,7 @@ import time
 import matplotlib.pyplot as plt
 from sudoku_alg_x import translate_solution_to_sudoku, solve_sudoku_string_exact_cover
 from sudoku_backtracking import solve_sudoku_backtracking
-from sudoku_helper import sudoku_string_to_sudoku_grid, print_sudoku_string, print_sudoku_grid
+from sudoku_helper import sudoku_string_to_sudoku_grid, print_sudoku_string, print_sudoku_grid, count_nums_sudoku_strings
 
 
 def benchmark_sudokus(sudoku_strings):
@@ -76,16 +76,23 @@ sudoku_strings = [
     # counter_backtracking_sudoku,
 ]
 
-# with open("200.txt", "r") as file:
-#     sudoku_strings = [line.strip() for line in file if line.strip()]
+filename = "50.txt"
+
+lengths = count_nums_sudoku_strings(filename)
+print("Filled cells per sudoku:")
+for i in range(len(lengths)):
+    print(i+1, ": ", lengths[i])
+
+with open(filename, "r") as file:
+    sudoku_strings = [line.strip() for line in file if line.strip()]
+
+backtrack_times, alg_x_times = benchmark_sudokus(sudoku_strings)
+print(backtrack_times, alg_x_times)
+plot_benchmark_results(sudoku_strings, backtrack_times, alg_x_times)
 
 # print(sudoku_strings)
-
-# backtrack_times, alg_x_times = benchmark_sudokus(sudoku_strings)
-# print(backtrack_times, alg_x_times)
-# plot_benchmark_results(sudoku_strings, backtrack_times, alg_x_times)
 
 # for sol in translate_solution_to_sudoku(solve_sudoku_string_exact_cover(invalid_sudoku)):
 #     print_sudoku_string(sol)
 
-print(translate_solution_to_sudoku(solve_sudoku_string_exact_cover(".4.6.8...56.9...2.19724.3...8..97..1.3.1.6..5..95.346....35.1.8....6..43.73..96.2")))
+# print(translate_solution_to_sudoku(solve_sudoku_string_exact_cover(".4.6.8...56.9...2.19724.3...8..97..1.3.1.6..5..95.346....35.1.8....6..43.73..96.2")))

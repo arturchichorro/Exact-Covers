@@ -58,3 +58,15 @@ def generate_filled_sudoku():
     grid = np.zeros((9, 9), dtype=int)
     fill_grid(grid)
     return grid
+
+def count_nums_sudoku_strings(filename):
+    """Reads a .txt file with Sudoku strings and returns an array with the count of numbers in each string."""
+    counts = []
+    
+    with open(filename, "r") as file:
+        for line in file:
+            sudoku_string = line.strip()  # Remove any trailing newlines or spaces
+            count = sum(1 for char in sudoku_string if char.isdigit())  # Count numbers (1-9)
+            counts.append(count)
+    
+    return counts
