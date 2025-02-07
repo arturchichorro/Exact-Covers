@@ -20,15 +20,7 @@ function solveExactCover(matrix: number[][]): Set<number>[] {
 }
 
 export function solve(npMatrix: npMatrix, partialSolution: Set<number>, solutions: Set<number>[]): void {
-    const rows = npMatrix.numRows;
-    const columns = npMatrix.numCols;
-
-    printMatrix(npMatrix)
-    console.log(partialSolution)
-    console.log(rows, columns)
-    console.log("")
-
-    if (columns === 1) {
+    if (npMatrix.numCols === 1) {
         solutions.push(partialSolution);
         return;
     }
@@ -66,8 +58,6 @@ export function chooseRow(npMatrix: npMatrix, rowIdx: number): npMatrix {
             }
         }
     }
-
-    console.log("RC ", rowsToDelete, columnsToDelete)
 
     const reducedMatrix = deleteRows(npMatrix, Array.from(rowsToDelete));
     return deleteColumns(reducedMatrix, Array.from(columnsToDelete));
