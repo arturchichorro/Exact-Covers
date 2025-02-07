@@ -1,21 +1,11 @@
 import React, { useState, useRef } from 'react';
 
-type SudokuGrid = number[][];
+interface SudokuProps {
+    initialGrid: number[][];
+}
 
-const initialGrid: SudokuGrid = [
-  [5, 3, 0, 0, 7, 0, 0, 0, 0],
-  [6, 0, 0, 1, 9, 5, 0, 0, 0],
-  [0, 9, 8, 0, 0, 0, 0, 6, 0],
-  [8, 0, 0, 0, 6, 0, 0, 0, 3],
-  [4, 0, 0, 8, 0, 3, 0, 0, 1],
-  [7, 0, 0, 0, 2, 0, 0, 0, 6],
-  [0, 6, 0, 0, 0, 0, 2, 8, 0],
-  [0, 0, 0, 4, 1, 9, 0, 0, 5],
-  [0, 0, 0, 0, 8, 0, 0, 7, 9],
-];
-
-const Sudoku: React.FC = () => {
-  const [grid, setGrid] = useState<SudokuGrid>(JSON.parse(JSON.stringify(initialGrid)));
+const Sudoku: React.FC<SudokuProps> = ({ initialGrid }) => {
+  const [grid, setGrid] = useState<number[][]>(JSON.parse(JSON.stringify(initialGrid)));
   const [solving, setSolving] = useState(false);
   const [delay, setDelay] = useState(100); // Default 100ms
   const solverRef = useRef<{ 
@@ -30,11 +20,7 @@ const Sudoku: React.FC = () => {
 
   const isValidPlacement = (grid: number[][], row: number, col: number, num: number): boolean => {
     for (let x = 0; x < 9; x++) {
-      if (grid[row][x] === num) return false;
-    }
-
-    for (let x = 0; x < 9; x++) {
-      if (grid[x][col] === num) return false;
+      if (grid[row][x] === num || grid[x][col] === num) return false;
     }
 
     const boxRow = Math.floor(row / 3) * 3;
@@ -180,7 +166,6 @@ const Sudoku: React.FC = () => {
             onChange={(e) => handleDelayChange(parseInt(e.target.value))}
             className="w-24"
           />
-          <span className="text-sm text-gray-500">{delay}ms</span>
         </div>
       </div>
       <div className="border-2 border-gray-400">
