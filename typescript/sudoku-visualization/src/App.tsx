@@ -1,5 +1,5 @@
 import './App.css'
-import Sudoku from './Sudoku/sudokuVisualization'
+import Sudoku from './Sudoku/components/Sudoku'
 // import SudokuSolver from './SudokuSolver'
 
 const initialGrid: number[][] = [
