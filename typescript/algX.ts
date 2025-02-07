@@ -1,4 +1,4 @@
-interface npMatrix {
+export interface npMatrix {
     data: number[][];
     numRows: number;
     numCols: number;
@@ -77,7 +77,6 @@ function deleteColumns(npMatrix: npMatrix, colIndices: number[]): npMatrix {
     const colSet = new Set(colIndices);
     const newData = npMatrix.data.map(row => row.filter((_, j) => !colSet.has(j)));
     const nColsRemoved = colIndices.filter(num => num < npMatrix.numCols).length
-
 
     return {
         data: newData,
