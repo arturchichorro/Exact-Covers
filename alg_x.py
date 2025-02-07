@@ -9,6 +9,12 @@ def solve_exact_cover(matrix):
     return solutions
 
 def solve(matrix, partial_solution, solutions):
+    print(matrix)
+    print(partial_solution)
+    print(matrix.shape)
+    print("")
+    
+    
     rows, columns = matrix.shape
     if columns == 1:
         solutions.append(partial_solution)
@@ -38,5 +44,20 @@ def choose_row(matrix, row_idx):
             for i in range(n_rows):
                 if matrix[i, j] == 1:
                     rows_to_delete.add(i)
+
+    print("RC ", rows_to_delete, columns_to_delete)
+
     reduced_matrix = np.delete(matrix, list(rows_to_delete), axis=0)
     return np.delete(reduced_matrix, list(columns_to_delete), axis=1)
+
+
+matrix = np.array([
+    [0, 0, 1, 0, 1, 1, 0],
+    [1, 0, 0, 1, 0, 0, 1],
+    [0, 1, 1, 0, 0, 1, 0],
+    [1, 0, 0, 1, 0, 0, 0],
+    [0, 1, 0, 0, 0, 0, 1],
+    [0, 0, 0, 1, 1, 0, 1]
+])
+
+print(solve_exact_cover(matrix))

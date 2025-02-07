@@ -1,4 +1,4 @@
-export function isValidPlacement(sudokuGrid: number[][], row: number, col: number, num: number) {
+export function isValidPlacement(sudokuGrid: number[][], row: number, col: number, num: number): boolean {
     if (sudokuGrid[row].includes(num)) {
         return false;
     }
@@ -21,7 +21,7 @@ export function isValidPlacement(sudokuGrid: number[][], row: number, col: numbe
     return true;
 }
 
-export function sudokuStringToSudokuGrid(sudokuString: string) {
+export function sudokuStringToSudokuGrid(sudokuString: string): number[][] {
     let result: number[][] = [];
     let idx: number = 0;
     for (let r = 0; r < 9; r++) {
