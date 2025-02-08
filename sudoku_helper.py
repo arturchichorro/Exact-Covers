@@ -65,8 +65,8 @@ def count_nums_sudoku_strings(filename):
     
     with open(filename, "r") as file:
         for line in file:
-            sudoku_string = line.strip()  # Remove any trailing newlines or spaces
-            count = sum(1 for char in sudoku_string if char.isdigit())  # Count numbers (1-9)
+            sudoku_string = line.strip() 
+            count = sum(1 for char in sudoku_string if char in "123456789") 
             counts.append(count)
     
     return counts

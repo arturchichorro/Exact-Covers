@@ -42,7 +42,7 @@ def sudoku_string_to_exact_cover(sudoku_string):
     empty_sudoku = empty_sudoku_exact_cover()
     partial_solution = set()
     for i, char in enumerate(sudoku_string):
-        if char == ".":
+        if char == "." or char == "0":
             continue
 
         row_id = (i // 9) * 81 + (i % 9) * 9 + int(char)
