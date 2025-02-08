@@ -1,6 +1,7 @@
 import './App.css'
-import Sudoku from './Sudoku/components/Sudoku'
+import SudokuBacktrack from './Sudoku/components/SudokuBacktrack'
 import SudokuAlgX from './Sudoku/components/SudokuAlgX';
+import SudokuComparison from './Sudoku/components/SudokuComparison';
 
 const initialGrid: number[][] = [
   [5, 3, 0, 0, 7, 0, 0, 0, 0],
@@ -18,8 +19,9 @@ function App() {
 
   return (
     <div className="flex">
-      <Sudoku initialGrid={initialGrid}/>
+      <SudokuBacktrack initialGrid={initialGrid}/>
       <SudokuAlgX initialGrid={initialGrid} />
+      <SudokuComparison initialGrid={initialGrid} />
     </div>
   )
 }

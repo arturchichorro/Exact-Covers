@@ -8,7 +8,7 @@ interface SudokuProps {
   initialGrid: number[][];
 }
 
-const Sudoku: React.FC<SudokuProps> = ({ initialGrid }) => {
+const SudokuBacktrack: React.FC<SudokuProps> = ({ initialGrid }) => {
   const [grid, setGrid] = useState<number[][]>(JSON.parse(JSON.stringify(initialGrid)));
   const [solving, setSolving] = useState(false);
   const [delay, setDelay] = useState(100);
@@ -68,4 +68,4 @@ const Sudoku: React.FC<SudokuProps> = ({ initialGrid }) => {
   );
 };
 
-export default Sudoku;
+export default SudokuBacktrack;
