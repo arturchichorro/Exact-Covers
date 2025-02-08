@@ -71,7 +71,6 @@ const SudokuComparison: React.FC<SudokuComparisonProps> = ({ initialGrid }) => {
 
   return (
     <div className="p-6">
-      {/* Shared controls at the top */}
       <div className="mb-6">
         <SudokuControls
           solving={solving}
