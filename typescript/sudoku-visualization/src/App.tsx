@@ -18,11 +18,15 @@ const initialGrid: number[][] = [
 function App() {
 
   return (
-    <div className="flex">
-      <SudokuBacktrack initialGrid={initialGrid}/>
-      <SudokuAlgX initialGrid={initialGrid} />
-      <SudokuComparison initialGrid={initialGrid} />
-    </div>
+    <>
+      <div className="flex">
+        <SudokuBacktrack initialGrid={initialGrid}/>
+        <SudokuAlgX initialGrid={initialGrid} />
+      </div>
+      <div>
+        <SudokuComparison initialGrid={initialGrid} />
+      </div>
+    </>
   )
 }
 

@@ -1,5 +1,4 @@
-import { sudokuMatrixToExactCover, sumColumnsExcludingFirst, chooseRow } from './exactCover';
-import { partialSolutionToGrid } from './gridConverter';
+import { sudokuMatrixToExactCover, sumColumnsExcludingFirst, chooseRow, partialSolutionToGrid } from './exactCover';
 import { SolverRef } from './types';
 import { npMatrix } from "./types";
 
