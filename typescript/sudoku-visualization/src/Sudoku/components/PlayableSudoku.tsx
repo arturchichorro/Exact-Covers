@@ -4,11 +4,13 @@ import SudokuNumberPad from './SudokuNumberPad';
 
 interface SudokuGridProps {
   initialGrid: number[][];
+  solutionGrid: number[][];
 }
 
-const PlayableSudoku: React.FC<SudokuGridProps> = ({ initialGrid }) => {
+const PlayableSudoku: React.FC<SudokuGridProps> = ({ initialGrid, solutionGrid }) => {
     const [grid, setGrid] = useState<number[][]>(initialGrid.map(row => [...row]));
     const [selectedCell, setSelectedCell] = useState<[number, number] | null>(null);
+    const [isCorrect, setIsCorrect] = useState<boolean>(false);
 
     const gridRef = useRef<HTMLDivElement>(null);
 
@@ -28,6 +30,19 @@ const PlayableSudoku: React.FC<SudokuGridProps> = ({ initialGrid }) => {
         }
         return true;
     };
+
+    const checkCompletion = useCallback((currentGrid: number[][]) => {
+        const complete = currentGrid.every(row => row.every(cell => cell !== 0));
+        if (!complete) return;
+
+        if (complete) {
+            const correct = currentGrid.every((row, i) =>
+                row.every((val, j) => val === solutionGrid[i][j])
+            );
+            setIsCorrect(correct)
+        }
+
+    }, [solutionGrid])
 
     const handleCellClick = (rowIndex: number, colIndex: number) => {
         if (initialGrid[rowIndex][colIndex] === 0) {
@@ -77,6 +92,10 @@ const PlayableSudoku: React.FC<SudokuGridProps> = ({ initialGrid }) => {
             document.removeEventListener('mousedown', handleClickOutside);
         }
     }, [handleKeyPress, handleClickOutside]);
+
+    useEffect(() => {
+        checkCompletion(grid);
+    }, [grid, checkCompletion]);
 
     const handleReset = () => {
         setGrid(initialGrid.map(row => [...row]));
@@ -132,6 +151,7 @@ const PlayableSudoku: React.FC<SudokuGridProps> = ({ initialGrid }) => {
             onNumberSelect={handleNumberSelect}
             onReset={handleReset}
             disabled={!selectedCell}
+            isCorrect={isCorrect}
         />
         </div>
     );

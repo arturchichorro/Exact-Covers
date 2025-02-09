@@ -4,13 +4,19 @@ interface SudokuNumberPadProps {
   onNumberSelect: (num: number) => void;
   onReset: () => void;
   disabled?: boolean;
+  isCorrect?: boolean;
 }
 
-const SudokuNumberPad: React.FC<SudokuNumberPadProps> = ({ onNumberSelect, onReset, disabled = false }) => {
+const SudokuNumberPad: React.FC<SudokuNumberPadProps> = ({ onNumberSelect, onReset, disabled = false, isCorrect = false }) => {
   const numbers = Array.from({ length: 9 }, (_, i) => i + 1);
 
   return (
     <div className="">
+        {isCorrect && (
+        <div className={'text-center p-2 rounded bg-green-100 text-green-800 border border-green-200'}>
+            'Congratulations! Puzzle solved correctly!'
+        </div>
+      )}
       <div className="grid grid-cols-3 gap-2 max-w-md">
         <button 
                 onClick={onReset}
