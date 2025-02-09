@@ -40,6 +40,7 @@ const PlayableSudoku: React.FC<SudokuGridProps> = ({ initialGrid, solutionGrid }
                 row.every((val, j) => val === solutionGrid[i][j])
             );
             setIsCorrect(correct)
+            setSelectedCell(null);
         }
 
     }, [solutionGrid])
