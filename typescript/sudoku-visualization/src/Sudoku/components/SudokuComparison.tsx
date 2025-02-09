@@ -4,13 +4,14 @@ import { SudokuControls } from './SudokuControls';
 import { createBacktrackingSolver } from '../utils/sudokuSolver';
 import { createAlgorithmXSolver } from '../utils/sudokuSolverAlgX';
 import type { SolverRef } from '../utils/types';
+import { speedToDelay } from '../utils/utils';
 
 interface SudokuComparisonProps {
   initialGrid: number[][];
 }
 
 const SudokuComparison: React.FC<SudokuComparisonProps> = ({ initialGrid }) => {
-  const [delay, setDelay] = useState(100);
+  const [speed, setSpeed] = useState(50); // Default speed of 50%
   const [solving, setSolving] = useState(false);
   
   const [backtrackGrid, setBacktrackGrid] = useState<number[][]>(
@@ -23,13 +24,13 @@ const SudokuComparison: React.FC<SudokuComparisonProps> = ({ initialGrid }) => {
   const solverRef = useRef<SolverRef>({
     pause: false,
     abort: false,
-    currentDelay: delay
+    currentDelay: speedToDelay(50) // Initialize with default speed
   });
 
   async function solveWithBothAlgorithms() {
     setSolving(true);
     solverRef.current.abort = false;
-    solverRef.current.currentDelay = delay;
+    solverRef.current.currentDelay = speedToDelay(speed);
 
     await Promise.all([
       (async () => {
@@ -64,9 +65,9 @@ const SudokuComparison: React.FC<SudokuComparisonProps> = ({ initialGrid }) => {
     setSolving(false);
   };
 
-  const handleDelayChange = (newDelay: number) => {
-    setDelay(newDelay);
-    solverRef.current.currentDelay = newDelay;
+  const handleSpeedChange = (newSpeed: number) => {
+    setSpeed(newSpeed);
+    solverRef.current.currentDelay = speedToDelay(newSpeed);
   };
 
   return (
@@ -75,10 +76,10 @@ const SudokuComparison: React.FC<SudokuComparisonProps> = ({ initialGrid }) => {
         <SudokuControls
           solving={solving}
           isPaused={solverRef.current.pause}
-          delay={delay}
+          speed={speed}
           onToggleSolving={toggleSolving}
           onReset={resetGrids}
-          onDelayChange={handleDelayChange}
+          onSpeedChange={handleSpeedChange}
         />
       </div>
 
