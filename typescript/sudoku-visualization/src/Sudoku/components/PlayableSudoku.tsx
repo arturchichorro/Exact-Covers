@@ -45,13 +45,14 @@ const PlayableSudoku: React.FC<SudokuGridProps> = ({ initialGrid, solutionGrid }
     }, [solutionGrid])
 
     const handleCellClick = (rowIndex: number, colIndex: number) => {
+        if (isCorrect) return;
         if (initialGrid[rowIndex][colIndex] === 0) {
         setSelectedCell([rowIndex, colIndex]);
         }
     };
 
     const handleKeyPress = useCallback((e: KeyboardEvent) => {
-        if (!selectedCell) return;
+        if (!selectedCell || isCorrect) return;
     
         const num = parseInt(e.key);
         if (num >= 0 && num <= 9) {
@@ -74,7 +75,7 @@ const PlayableSudoku: React.FC<SudokuGridProps> = ({ initialGrid, solutionGrid }
             });
         }
         }
-    }, [selectedCell]);
+    }, [selectedCell, isCorrect]);
 
     const handleClickOutside = useCallback((event: MouseEvent) => {
         if (
@@ -102,6 +103,7 @@ const PlayableSudoku: React.FC<SudokuGridProps> = ({ initialGrid, solutionGrid }
 
     const handleReset = () => {
         setGrid(initialGrid.map(row => [...row]));
+        setIsCorrect(false);
         setSelectedCell(null);
     };
 
@@ -143,7 +145,7 @@ const PlayableSudoku: React.FC<SudokuGridProps> = ({ initialGrid, solutionGrid }
                     isSelected={isSelected}
                     onClick={() => handleCellClick(rowIndex, colIndex)}
                     isValid={isValid}
-                    isPlayable={true}
+                    isPlayable={!isCorrect}
                     />
                 );
                 })}
@@ -153,7 +155,7 @@ const PlayableSudoku: React.FC<SudokuGridProps> = ({ initialGrid, solutionGrid }
         <SudokuNumberPad 
             onNumberSelect={handleNumberSelect}
             onReset={handleReset}
-            disabled={!selectedCell}
+            disabled={!selectedCell || isCorrect}
             isCorrect={isCorrect}
             padRef={padRef}
         />
