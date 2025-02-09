@@ -12,13 +12,13 @@ const SudokuNumberPad: React.FC<SudokuNumberPadProps> = ({ onNumberSelect, onRes
   const numbers = Array.from({ length: 9 }, (_, i) => i + 1);
 
   return (
-    <div ref= {padRef} className="flex flex-col gap-2 max-w-40">
+    <div className="flex flex-col gap-2 max-w-40">
         {isCorrect && (
         <div className={'text-center p-2 rounded bg-green-100 text-green-800 border border-green-200'}>
             Puzzle solved!
         </div>
       )}
-      <div className="grid grid-cols-3 gap-2 max-w-md">
+      <div ref= {padRef} className="grid grid-cols-3 gap-2 max-w-md">
         <button 
                 onClick={onReset}
                 className="col-span-3 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
