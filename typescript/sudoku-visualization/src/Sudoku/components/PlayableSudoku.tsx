@@ -11,8 +11,8 @@ const PlayableSudoku: React.FC<SudokuGridProps> = ({ initialGrid, solutionGrid }
     const [grid, setGrid] = useState<number[][]>(initialGrid.map(row => [...row]));
     const [selectedCell, setSelectedCell] = useState<[number, number] | null>(null);
     const [isCorrect, setIsCorrect] = useState<boolean>(false);
-
     const gridRef = useRef<HTMLDivElement>(null);
+    const padRef = useRef<HTMLDivElement>(null);
 
     const isValidMove = (row: number, col: number, value: number): boolean => {
         for (let i = 0; i < 9; i++) {
@@ -77,9 +77,12 @@ const PlayableSudoku: React.FC<SudokuGridProps> = ({ initialGrid, solutionGrid }
     }, [selectedCell]);
 
     const handleClickOutside = useCallback((event: MouseEvent) => {
-        console.log("here", gridRef)
-
-        if (gridRef.current && !gridRef.current.contains(event.target as Node)) {
+        if (
+            gridRef.current 
+            && !gridRef.current.contains(event.target as Node)
+            && padRef.current 
+            && !padRef.current.contains(event.target as Node)
+        ) {
             setSelectedCell(null);
         }
     }, []);
@@ -152,6 +155,7 @@ const PlayableSudoku: React.FC<SudokuGridProps> = ({ initialGrid, solutionGrid }
             onReset={handleReset}
             disabled={!selectedCell}
             isCorrect={isCorrect}
+            padRef={padRef}
         />
         </div>
     );
