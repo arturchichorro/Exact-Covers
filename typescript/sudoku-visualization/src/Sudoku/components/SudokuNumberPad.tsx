@@ -2,24 +2,31 @@ import React from 'react';
 
 interface SudokuNumberPadProps {
   onNumberSelect: (num: number) => void;
+  onReset: () => void;
   disabled?: boolean;
 }
 
-const SudokuNumberPad: React.FC<SudokuNumberPadProps> = ({ onNumberSelect, disabled = false }) => {
+const SudokuNumberPad: React.FC<SudokuNumberPadProps> = ({ onNumberSelect, onReset, disabled = false }) => {
   const numbers = Array.from({ length: 9 }, (_, i) => i + 1);
 
   return (
     <div className="">
-      <div className="grid grid-cols-5 gap-2 max-w-md mx-auto">
+      <div className="grid grid-cols-3 gap-2 max-w-md">
+        <button 
+                onClick={onReset}
+                className="col-span-3 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+            >
+                Reset Game
+        </button>
         {numbers.map((num) => (
           <button
             key={num}
             onClick={() => onNumberSelect(num)}
             disabled={disabled}
-            className={`
+            className={`w-12 h-12
               p-2 text-md font-semibold rounded
               ${disabled 
-                ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                ? 'bg-gray-200 text-gray-400 cursor-not-allowed border-gray-300'
                 : 'bg-white border-2 border-gray-300 hover:bg-gray-100 active:bg-gray-200'
               }
               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50
@@ -31,8 +38,8 @@ const SudokuNumberPad: React.FC<SudokuNumberPadProps> = ({ onNumberSelect, disab
         <button
           onClick={() => onNumberSelect(0)}
           disabled={disabled}
-          className={`
-            p-2 text-md font-semibold rounded col-span-1
+          className={`w-12 h-12
+            p-2 text-md font-semibold rounded col-start-2
             ${disabled
               ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
               : 'bg-red-100 border-2 border-red-300 hover:bg-red-200 active:bg-red-300'
