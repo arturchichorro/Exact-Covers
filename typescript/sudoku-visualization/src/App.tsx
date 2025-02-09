@@ -2,6 +2,7 @@ import './App.css'
 import SudokuBacktrack from './Sudoku/components/SudokuBacktrack'
 import SudokuAlgX from './Sudoku/components/SudokuAlgX';
 import SudokuComparison from './Sudoku/components/SudokuComparison';
+import PlayableSudoku from './Sudoku/components/PlayableSudoku';
 
 const initialGrid: number[][] = [
   [5, 3, 0, 0, 7, 0, 0, 0, 0],
@@ -25,6 +26,9 @@ function App() {
       </div>
       <div>
         <SudokuComparison initialGrid={initialGrid} />
+      </div>
+      <div>
+        <PlayableSudoku initialGrid={initialGrid}/>
       </div>
     </>
   )
