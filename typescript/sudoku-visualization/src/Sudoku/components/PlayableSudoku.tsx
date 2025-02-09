@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { SudokuCell } from './SudokuCell';
+import SudokuNumberPad from './SudokuNumberPad';
 
 interface SudokuGridProps {
   initialGrid: number[][];
@@ -68,6 +69,19 @@ const PlayableSudoku: React.FC<SudokuGridProps> = ({ initialGrid }) => {
         setSelectedCell(null);
     };
 
+    const handleNumberSelect = (num: number) => {
+        if (!selectedCell) return;
+        
+        const [row, col] = selectedCell;
+        if (initialGrid[row][col] === 0) {
+          setGrid(prevGrid => {
+            const newGrid = prevGrid.map(row => [...row]);
+            newGrid[row][col] = num;
+            return newGrid;
+          });
+        }
+    };
+
     return (
         <div className="flex flex-col items-center gap-4">
         <div className="border-2 border-gray-400">
@@ -100,6 +114,10 @@ const PlayableSudoku: React.FC<SudokuGridProps> = ({ initialGrid }) => {
             </div>
             ))}
         </div>
+        <SudokuNumberPad 
+            onNumberSelect={handleNumberSelect}
+            disabled={!selectedCell}
+        />
         <button 
             onClick={handleReset}
             className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
