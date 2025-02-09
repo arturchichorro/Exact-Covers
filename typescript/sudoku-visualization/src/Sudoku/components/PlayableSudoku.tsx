@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { SudokuCell } from './SudokuCell';
 import SudokuNumberPad from './SudokuNumberPad';
 
@@ -9,6 +9,8 @@ interface SudokuGridProps {
 const PlayableSudoku: React.FC<SudokuGridProps> = ({ initialGrid }) => {
     const [grid, setGrid] = useState<number[][]>(initialGrid.map(row => [...row]));
     const [selectedCell, setSelectedCell] = useState<[number, number] | null>(null);
+
+    const gridRef = useRef<HTMLDivElement>(null);
 
     const isValidMove = (row: number, col: number, value: number): boolean => {
         for (let i = 0; i < 9; i++) {
@@ -59,10 +61,22 @@ const PlayableSudoku: React.FC<SudokuGridProps> = ({ initialGrid }) => {
         }
     }, [selectedCell]);
 
+    const handleClickOutside = useCallback((event: MouseEvent) => {
+        console.log("here", gridRef)
+
+        if (gridRef.current && !gridRef.current.contains(event.target as Node)) {
+            setSelectedCell(null);
+        }
+    }, []);
+
     useEffect(() => {
         window.addEventListener('keydown', handleKeyPress);
-        return () => window.removeEventListener('keydown', handleKeyPress);
-    }, [handleKeyPress]);
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => { 
+            window.removeEventListener('keydown', handleKeyPress); 
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+    }, [handleKeyPress, handleClickOutside]);
 
     const handleReset = () => {
         setGrid(initialGrid.map(row => [...row]));
@@ -84,7 +98,7 @@ const PlayableSudoku: React.FC<SudokuGridProps> = ({ initialGrid }) => {
 
     return (
         <div className="flex flex-row justify-center items-center gap-4">
-        <div className="border-2 border-gray-400">
+        <div ref={gridRef} className="border-2 border-gray-400">
             {grid.map((row, rowIndex) => (
             <div key={rowIndex} className="flex">
                 {row.map((_, colIndex) => {
