@@ -1,8 +1,9 @@
+import pandas as pd
 import numpy as np
 import time
 import matplotlib.pyplot as plt
-from sudoku_alg_x import translate_solution_to_sudoku, solve_sudoku_string_exact_cover
-from sudoku_backtracking import solve_sudoku_backtracking
+from sudoku_alg_x import translate_solution_to_sudoku, solve_sudoku_string_exact_cover, solve_sudoku_string_exact_cover_w_counts
+from sudoku_backtracking import solve_sudoku_backtracking, solve_sudoku_backtracking_counting_nodes
 from sudoku_helper import sudoku_string_to_sudoku_grid, print_sudoku_string, print_sudoku_grid, count_nums_sudoku_strings
 
 
@@ -81,6 +82,46 @@ def plot_benchmark_results(sudoku_strings, backtrack_times, alg_x_times):
     plt.tight_layout()
     plt.show()
 
+def benchmark_sudokus_w_count(sudoku_strings):
+    results = []
+
+    for i, sudoku_string in enumerate(sudoku_strings):
+        grid = sudoku_string_to_sudoku_grid(sudoku_string)
+        start_time = time.perf_counter()
+        nodes_bt = solve_sudoku_backtracking_counting_nodes(grid)
+        end_time = time.perf_counter()
+        backtrack_time = end_time - start_time
+        
+        print(f"Solved {i+1}/{len(sudoku_strings)} with Backtracking in {backtrack_time:.6f}s using {nodes_bt} nodes.")
+        start_time = time.perf_counter()
+        solution, nodes_alg_x = solve_sudoku_string_exact_cover_w_counts(sudoku_string)
+        translate_solution_to_sudoku(solution)
+        end_time = time.perf_counter()
+        alg_x_time = end_time - start_time
+
+        print(f"Solved {i+1}/{len(sudoku_strings)} with Algorithm X in {alg_x_time:.6f}s using {nodes_alg_x} nodes.")
+
+        speedup = backtrack_time / alg_x_time if alg_x_time > 0 else float('inf')
+        node_efficiency = nodes_bt / nodes_alg_x if nodes_alg_x > 0 else float('inf')
+
+        results.append({
+            "Sudoku #": i + 1,
+            "Backtracking Time (s)": backtrack_time,
+            "Backtracking Nodes": nodes_bt,
+            "Algorithm X Time (s)": alg_x_time,
+            "Algorithm X Nodes": nodes_alg_x,
+            "Speedup (Backtracking / Alg X)": speedup,
+            "Node Efficiency (Backtracking / Alg X)": node_efficiency
+        })
+
+    df = pd.DataFrame(results)
+
+    df.to_csv("sudoku_benchmark_results.csv", index=False)
+
+    print(df.head())
+
+    return df
+
 # sudoku_string = ".4.6.8...56.9...2.19724.3...8..97..1.3.1.6..5..95.346....35.1.8....6..43.73..96.2"
 # sudoku_string2 = "2.6.51.7.5.87.6..94.......1.49..58..375.481..82.3.97.51..6..9....48.32..7.2.....3"
 # diabolical_sudoku = "..43......5...91.4...1....6......8..61..9...5..8.23......2.753.5.....6.7...4.5..."
@@ -122,11 +163,17 @@ def plot_benchmark_results(sudoku_strings, backtrack_times, alg_x_times):
 
 # print(sudoku_strings)
 
-filename = "puzzles.txt"
+filename = "50.txt"
 lengths = count_nums_sudoku_strings(filename)
 print("Filled cells per sudoku:")
 for i in range(len(lengths)):
     print(i+1, ": ", lengths[i])
+
+with open(filename, "r") as file:
+    sudoku_strings = [line.strip() for line in file if line.strip()]
+
+df = benchmark_sudokus_w_count(sudoku_strings)
+df = pd.read_csv("sudoku_benchmark_results.csv")
 
 
 # with open(filename, "r") as file:

@@ -102,11 +102,11 @@ def translate_solution_to_sudoku(solutions):
     
     return result
 
-def solve_sudoku_string_exact_cover(sudoku_string):
+def solve_sudoku_string_exact_cover_w_counts(sudoku_string):
     sudoku_matrix, partial_solution = sudoku_string_to_exact_cover(sudoku_string)
     solutions = []
-    node_counter = 0
+    node_counter = [0]
 
     solve_and_count(sudoku_matrix, partial_solution, solutions, node_counter)
 
-    return solutions, node_counter
+    return solutions, node_counter[0]
