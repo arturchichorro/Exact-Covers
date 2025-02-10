@@ -1,6 +1,6 @@
 import numpy as np
 from math import sqrt
-from alg_x import solve, choose_row
+from alg_x import solve, choose_row, solve_and_count
 
 def _one_constraint(row, size):
     return row // size
@@ -101,3 +101,12 @@ def translate_solution_to_sudoku(solutions):
         result.append(sudo_string)
     
     return result
+
+def solve_sudoku_string_exact_cover(sudoku_string):
+    sudoku_matrix, partial_solution = sudoku_string_to_exact_cover(sudoku_string)
+    solutions = []
+    node_counter = 0
+
+    solve_and_count(sudoku_matrix, partial_solution, solutions, node_counter)
+
+    return solutions, node_counter
