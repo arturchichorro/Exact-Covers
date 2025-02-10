@@ -70,3 +70,16 @@ def count_nums_sudoku_strings(filename):
             counts.append(count)
     
     return counts
+
+def is_valid_solved_grid(matrix):
+    for i in range(9):
+        if len(set(matrix[i, :])) != 9 or len(set(matrix[:, i])) != 9:
+            return False
+        
+    for r in range(0,9,3):
+        for c in range(0,9,3):
+            subgrid = matrix[r:r+3, c:c+3].flatten()
+            if len(set(subgrid)) != 9:
+                return False
+            
+    return True

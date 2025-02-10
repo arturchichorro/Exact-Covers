@@ -2,9 +2,9 @@ import pandas as pd
 import numpy as np
 import time
 import matplotlib.pyplot as plt
-from sudoku_alg_x import translate_solution_to_sudoku, solve_sudoku_string_exact_cover, solve_sudoku_string_exact_cover_w_counts
+from sudoku_alg_x import translate_solution_to_sudoku, solve_sudoku_string_exact_cover, solve_sudoku_string_exact_cover_w_counts, solve_sudoku_matrix_exact_cover
 from sudoku_backtracking import solve_sudoku_backtracking, solve_sudoku_backtracking_counting_nodes
-from sudoku_helper import sudoku_string_to_sudoku_grid, print_sudoku_string, print_sudoku_grid, count_nums_sudoku_strings
+from sudoku_helper import sudoku_string_to_sudoku_grid, print_sudoku_string, print_sudoku_grid, count_nums_sudoku_strings, is_valid_solved_grid
 
 
 def benchmark_sudokus(sudoku_strings):
@@ -54,6 +54,21 @@ def benchmark_alg_x(sudoku_strings):
     
     return alg_x_times
 
+def verify_alg_x(sudoku_strings):
+    invalid = []
+
+    for i, sudoku_string in enumerate(sudoku_strings):
+
+        sols = translate_solution_to_sudoku(solve_sudoku_string_exact_cover(sudoku_string))
+        for s in sols:
+            grid = sudoku_string_to_sudoku_grid(s)
+            if is_valid_solved_grid(grid):
+                invalid.append(i)
+                print_sudoku_grid(grid)
+
+        print("Solved: ", i+1, "/", len(sudoku_strings))
+    
+    return invalid
 
 def plot_benchmark_results(sudoku_strings, backtrack_times, alg_x_times):
     """Plot benchmark results for Sudoku solving methods."""
@@ -169,11 +184,17 @@ print("Filled cells per sudoku:")
 for i in range(len(lengths)):
     print(i+1, ": ", lengths[i])
 
-with open(filename, "r") as file:
-    sudoku_strings = [line.strip() for line in file if line.strip()]
+# with open(filename, "r") as file:
+#     sudoku_strings = [line.strip() for line in file if line.strip()]
 
-df = benchmark_sudokus_w_count(sudoku_strings)
-df = pd.read_csv("sudoku_benchmark_results.csv")
+sudoku_strings = ["....9.412...47......65.29..4..7...2......87..58....6...2...5...8.......16..2...3."]
+r = sudoku_string_to_sudoku_grid(sudoku_strings[0])
+
+# df = benchmark_sudokus_w_count(sudoku_strings)
+# df = pd.read_csv("sudoku_benchmark_results.csv")
+
+
+# print(verify_alg_x(sudoku_strings))
 
 
 # with open(filename, "r") as file:
