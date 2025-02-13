@@ -63,10 +63,10 @@ export const createAlgorithmXSolver = (
     }
 
     for await (const partial of solveSudokuWithYield(initialGrid)) {
+      if (solutions.length >= 0) break;
       if (solverRef.current.abort) break;
       solutions.push(partial);
-    }
-    
+    }    
     return solutions;
   };
 };

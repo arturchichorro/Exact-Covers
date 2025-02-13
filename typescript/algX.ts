@@ -20,6 +20,11 @@ function solveExactCover(matrix: number[][]): Set<number>[] {
 }
 
 export function solve(npMatrix: npMatrix, partialSolution: Set<number>, solutions: Set<number>[]): void {
+    
+    console.log([...partialSolution].join(" "));
+    console.log(partialSolution.size)
+    console.log("")
+    
     if (npMatrix.numCols === 1) {
         solutions.push(partialSolution);
         return;

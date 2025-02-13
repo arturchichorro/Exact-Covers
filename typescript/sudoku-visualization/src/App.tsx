@@ -2,7 +2,7 @@ import './App.css'
 import SudokuBacktrack from './Sudoku/components/SudokuBacktrack'
 import SudokuAlgX from './Sudoku/components/SudokuAlgX';
 import SudokuComparison from './Sudoku/components/SudokuComparison';
-import PlayableSudoku from './Sudoku/components/PlayableSudoku';
+// import PlayableSudoku from './Sudoku/components/PlayableSudoku';
 
 const initialGrid: number[][] = [
   [5, 3, 0, 0, 7, 0, 0, 0, 0],
@@ -16,7 +16,7 @@ const initialGrid: number[][] = [
   [0, 0, 0, 0, 8, 0, 0, 7, 9],
 ];
 
-const grid2: number[][] = [
+const badGrid: number[][] = [
   [0, 0, 0, 0, 9, 0, 4, 1, 2],
   [0, 0, 0, 4, 7, 0, 0, 0, 0],
   [0, 0, 6, 5, 0, 2, 9, 0, 0],
@@ -40,23 +40,23 @@ const grid3: number[][] = [
   [0, 7, 0, 0, 3, 5, 0, 0, 0],
 ]
 
-const solutionGrid: number[][] = [
-  [5, 3, 4, 6, 7, 8, 9, 1, 2],
-  [6, 7, 2, 1, 9, 5, 3, 4, 8],
-  [1, 9, 8, 3, 4, 2, 5, 6, 7],
-  [8, 5, 9, 7, 6, 1, 4, 2, 3],
-  [4, 2, 6, 8, 5, 3, 7, 9, 1],
-  [7, 1, 3, 9, 2, 4, 8, 5, 6],
-  [9, 6, 1, 5, 3, 7, 2, 8, 4],
-  [2, 8, 7, 4, 1, 9, 6, 3, 5],
-  [3, 4, 5, 2, 8, 6, 1, 7, 9],
-];
+// const solutionGrid: number[][] = [
+//   [5, 3, 4, 6, 7, 8, 9, 1, 2],
+//   [6, 7, 2, 1, 9, 5, 3, 4, 8],
+//   [1, 9, 8, 3, 4, 2, 5, 6, 7],
+//   [8, 5, 9, 7, 6, 1, 4, 2, 3],
+//   [4, 2, 6, 8, 5, 3, 7, 9, 1],
+//   [7, 1, 3, 9, 2, 4, 8, 5, 6],
+//   [9, 6, 1, 5, 3, 7, 2, 8, 4],
+//   [2, 8, 7, 4, 1, 9, 6, 3, 5],
+//   [3, 4, 5, 2, 8, 6, 1, 7, 9],
+// ];
 
 function App() {
 
   return (
     <>
-      <div className="flex">
+      {/* <div className="flex">
         <SudokuBacktrack initialGrid={initialGrid}/>
         <SudokuAlgX initialGrid={initialGrid} />
       </div>
@@ -65,11 +65,14 @@ function App() {
       </div>
       <div>
         <PlayableSudoku initialGrid={initialGrid} solutionGrid={solutionGrid}/>
-      </div>
+      </div> */}
       <div>
-      <SudokuBacktrack initialGrid={grid2}/>
-        <SudokuAlgX initialGrid={grid2} />
+        <SudokuBacktrack initialGrid={badGrid}/>
+        <SudokuAlgX initialGrid={badGrid} />
+        <SudokuAlgX initialGrid={initialGrid} />
         <SudokuAlgX initialGrid={grid3} />
+        <SudokuComparison initialGrid={grid3} />
+        {/* <SudokuAlgX initialGrid={grid3} /> */}
       </div>
     </>
   )

@@ -1,4 +1,5 @@
 import { npMatrix, solve, chooseRow } from "./algX";
+import { sudokuStringToSudokuGrid, printSudokuGrid } from "./sudokuHelper";
 
 function _oneConstraint(row: number, size: number): number {
     return Math.floor(row / size);
@@ -126,4 +127,39 @@ function translateSolutionToSudoku(solutions: Set<number>[]): string[] {
         }
         return sudoString;
     });
+}
+
+function partialSolutionToGrid(solution: Set<number>): number[][] {
+    const grid = Array(9).fill(0).map(() => Array(9).fill(0));
+
+    for (const rowId of solution) {
+        const id = rowId - 1;
+        const row = Math.floor(id / 81);
+        const col = Math.floor((id % 81) / 9);
+        const num = (id % 9) + 1;
+        
+        grid[row][col] = num;
+    }
+
+    return grid;
+}
+
+const badGrid: number[][] = [
+    [0, 0, 0, 0, 9, 0, 4, 1, 2],
+    [0, 0, 0, 4, 7, 0, 0, 0, 0],
+    [0, 0, 6, 5, 0, 2, 9, 0, 0],
+    [4, 0, 0, 7, 0, 0, 0, 2, 0],
+    [0, 0, 0, 0, 0, 8, 7, 0, 0],
+    [5, 8, 0, 0, 0, 0, 6, 0, 0],
+    [0, 2, 0, 0, 0, 5, 0, 0, 0],
+    [8, 0, 0, 0, 0, 0, 0, 0, 1],
+    [6, 0, 0, 2, 0, 0, 0, 3, 0],
+];
+
+const solved = solveSudokuMatrixExactCover(badGrid)
+// const solutions = translateSolutionToSudoku(solved)
+
+for (let i = 0; i < solved.length; i++) {
+    const sol = solved[i]
+    printSudokuGrid(partialSolutionToGrid(sol))
 }

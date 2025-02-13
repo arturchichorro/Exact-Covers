@@ -49,3 +49,7 @@ export function printSudokuGrid(sudokuGrid: number[][]) {
         }
     }
 }
+
+export function printPartialSolution(ps: Set<number>) {
+    console.log([...ps].join(" "));
+}
