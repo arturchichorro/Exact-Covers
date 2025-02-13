@@ -144,22 +144,3 @@ function partialSolutionToGrid(solution: Set<number>): number[][] {
     return grid;
 }
 
-const badGrid: number[][] = [
-    [0, 0, 0, 0, 9, 0, 4, 1, 2],
-    [0, 0, 0, 4, 7, 0, 0, 0, 0],
-    [0, 0, 6, 5, 0, 2, 9, 0, 0],
-    [4, 0, 0, 7, 0, 0, 0, 2, 0],
-    [0, 0, 0, 0, 0, 8, 7, 0, 0],
-    [5, 8, 0, 0, 0, 0, 6, 0, 0],
-    [0, 2, 0, 0, 0, 5, 0, 0, 0],
-    [8, 0, 0, 0, 0, 0, 0, 0, 1],
-    [6, 0, 0, 2, 0, 0, 0, 3, 0],
-];
-
-const solved = solveSudokuMatrixExactCover(badGrid)
-// const solutions = translateSolutionToSudoku(solved)
-
-for (let i = 0; i < solved.length; i++) {
-    const sol = solved[i]
-    printSudokuGrid(partialSolutionToGrid(sol))
-}

@@ -10,10 +10,6 @@ def solve_exact_cover(matrix):
 
 def solve(matrix, partial_solution, solutions):
 
-    print(partial_solution)
-    print(len(partial_solution))
-    print("")
-
     rows, columns = matrix.shape
     if columns == 1:
         solutions.append(partial_solution)

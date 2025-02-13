@@ -112,24 +112,3 @@ def solve_sudoku_string_exact_cover_w_counts(sudoku_string):
 
     return solutions, node_counter[0]
 
-badGrid = np.matrix([
-    [0, 0, 0, 0, 9, 0, 4, 1, 2],
-    [0, 0, 0, 4, 7, 0, 0, 0, 0],
-    [0, 0, 6, 5, 0, 2, 9, 0, 0],
-    [4, 0, 0, 7, 0, 0, 0, 2, 0],
-    [0, 0, 0, 0, 0, 8, 7, 0, 0],
-    [5, 8, 0, 0, 0, 0, 6, 0, 0],
-    [0, 2, 0, 0, 0, 5, 0, 0, 0],
-    [8, 0, 0, 0, 0, 0, 0, 0, 1],
-    [6, 0, 0, 2, 0, 0, 0, 3, 0],
-])
-
-solved = solve_sudoku_matrix_exact_cover(badGrid)
-
-print(solved[0])
-print(len(solved[0]))
-
-solutions = translate_solution_to_sudoku(solved)
-
-for sol in solutions:
-    print_sudoku_grid(sudoku_string_to_sudoku_grid(sol))
