@@ -174,3 +174,14 @@ function solve(npMatrix: npMatrix, partialSolution: Set<number>, solutions: Set<
         solve(reducedMatrix, newPartialSolution, solutions);
     }
 }
+
+export function translateSolutionToSudoku(solutions: Set<number>[]): string[] {
+    return solutions.map(sol => {
+        const sortedSol = Array.from(sol).sort((a, b) => a - b);
+        let sudoString = "";
+        for (let i = 0; i < sortedSol.length; i++) {
+            sudoString += (i === 0) ? sortedSol[i].toString() : (sortedSol[i] % (9 * i) !== 0 ? (sortedSol[i] % (9 * i)).toString() : "9");
+        }
+        return sudoString;
+    });
+}

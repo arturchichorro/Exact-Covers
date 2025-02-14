@@ -1,6 +1,6 @@
 import { isValidPlacement } from "./sudokuSolver"
-import { solveSudokuMatrixExactCover } from "./exactCover";
-import { deepCopy, shuffleArray } from "./utils";
+import { solveSudokuMatrixExactCover, translateSolutionToSudoku } from "./exactCover";
+import { deepCopy, shuffleArray, sudokuStringToSudokuGrid } from "./utils";
 
 export function generateFilledSudoku(): number[][] {
     const grid: number[][] = Array(9).fill(0).map(() => Array(9).fill(0))
@@ -56,3 +56,11 @@ export function generateSudoku(): number[][] {
     return sudokuGrid
 }
 
+export function generateSudokuAndSolution(): { initialGrid: number[][], solutionGrid: number[][] } {
+    const initialGrid: number[][] = generateSudoku()
+    const solutionGrid: number[][] = sudokuStringToSudokuGrid(translateSolutionToSudoku(solveSudokuMatrixExactCover(initialGrid))[0])
+    return {
+        initialGrid,
+        solutionGrid
+    }
+}

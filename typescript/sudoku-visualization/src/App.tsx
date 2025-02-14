@@ -1,45 +1,50 @@
 import './App.css'
 import SudokuBacktrack from './Sudoku/components/SudokuBacktrack'
 import SudokuAlgX from './Sudoku/components/SudokuAlgX';
-import SudokuComparison from './Sudoku/components/SudokuComparison';
-import TestSudoku from './Sudoku/components/TestSudoku';
-// import PlayableSudoku from './Sudoku/components/PlayableSudoku';
+// import SudokuComparison from './Sudoku/components/SudokuComparison';
+// import TestSudoku from './Sudoku/components/TestSudoku';
+import { generateSudokuAndSolution } from './Sudoku/utils/generateSudoku';
+import PlayableSudoku from './Sudoku/components/PlayableSudoku';
 
-const initialGrid: number[][] = [
-  [5, 3, 0, 0, 7, 0, 0, 0, 0],
-  [6, 0, 0, 1, 9, 5, 0, 0, 0],
-  [0, 9, 8, 0, 0, 0, 0, 6, 0],
-  [8, 0, 0, 0, 6, 0, 0, 0, 3],
-  [4, 0, 0, 8, 0, 3, 0, 0, 1],
-  [7, 0, 0, 0, 2, 0, 0, 0, 6],
-  [0, 6, 0, 0, 0, 0, 2, 8, 0],
-  [0, 0, 0, 4, 1, 9, 0, 0, 5],
-  [0, 0, 0, 0, 8, 0, 0, 7, 9],
-];
 
-const badGrid: number[][] = [
-  [0, 0, 0, 0, 9, 0, 4, 1, 2],
-  [0, 0, 0, 4, 7, 0, 0, 0, 0],
-  [0, 0, 6, 5, 0, 2, 9, 0, 0],
-  [4, 0, 0, 7, 0, 0, 0, 2, 0],
-  [0, 0, 0, 0, 0, 8, 7, 0, 0],
-  [5, 8, 0, 0, 0, 0, 6, 0, 0],
-  [0, 2, 0, 0, 0, 5, 0, 0, 0],
-  [8, 0, 0, 0, 0, 0, 0, 0, 1],
-  [6, 0, 0, 2, 0, 0, 0, 3, 0],
-];
+const { initialGrid: grid, solutionGrid: sol } = generateSudokuAndSolution()
 
-const grid3: number[][] = [
-  [0, 1, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 3, 0, 0, 4],
-  [6, 0, 0, 0, 0, 0, 9, 0, 0],
-  [0, 0, 0, 0, 0, 0, 2, 8, 0],
-  [7, 0, 0, 9, 0, 2, 0, 3, 6],
-  [0, 8, 0, 7, 0, 0, 4, 0, 0],
-  [0, 0, 0, 0, 6, 0, 5, 1, 8],
-  [0, 0, 2, 0, 0, 0, 0, 0, 0],
-  [0, 7, 0, 0, 3, 5, 0, 0, 0],
-]
+
+// const initialGrid: number[][] = [
+//   [5, 3, 0, 0, 7, 0, 0, 0, 0],
+//   [6, 0, 0, 1, 9, 5, 0, 0, 0],
+//   [0, 9, 8, 0, 0, 0, 0, 6, 0],
+//   [8, 0, 0, 0, 6, 0, 0, 0, 3],
+//   [4, 0, 0, 8, 0, 3, 0, 0, 1],
+//   [7, 0, 0, 0, 2, 0, 0, 0, 6],
+//   [0, 6, 0, 0, 0, 0, 2, 8, 0],
+//   [0, 0, 0, 4, 1, 9, 0, 0, 5],
+//   [0, 0, 0, 0, 8, 0, 0, 7, 9],
+// ];
+
+// const badGrid: number[][] = [
+//   [0, 0, 0, 0, 9, 0, 4, 1, 2],
+//   [0, 0, 0, 4, 7, 0, 0, 0, 0],
+//   [0, 0, 6, 5, 0, 2, 9, 0, 0],
+//   [4, 0, 0, 7, 0, 0, 0, 2, 0],
+//   [0, 0, 0, 0, 0, 8, 7, 0, 0],
+//   [5, 8, 0, 0, 0, 0, 6, 0, 0],
+//   [0, 2, 0, 0, 0, 5, 0, 0, 0],
+//   [8, 0, 0, 0, 0, 0, 0, 0, 1],
+//   [6, 0, 0, 2, 0, 0, 0, 3, 0],
+// ];
+
+// const grid3: number[][] = [
+//   [0, 1, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 3, 0, 0, 4],
+//   [6, 0, 0, 0, 0, 0, 9, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 2, 8, 0],
+//   [7, 0, 0, 9, 0, 2, 0, 3, 6],
+//   [0, 8, 0, 7, 0, 0, 4, 0, 0],
+//   [0, 0, 0, 0, 6, 0, 5, 1, 8],
+//   [0, 0, 2, 0, 0, 0, 0, 0, 0],
+//   [0, 7, 0, 0, 3, 5, 0, 0, 0],
+// ]
 
   // const solutionGrid: number[][] = [
   //   [5, 3, 4, 6, 7, 8, 9, 1, 2],
@@ -68,15 +73,20 @@ function App() {
         <PlayableSudoku initialGrid={initialGrid} solutionGrid={solutionGrid}/>
       </div> */}
       <div>
-        <SudokuBacktrack initialGrid={badGrid}/>
+        {/* <SudokuBacktrack initialGrid={badGrid}/>
         <SudokuAlgX initialGrid={badGrid} />
         <SudokuAlgX initialGrid={initialGrid} />
         <SudokuAlgX initialGrid={grid3} />
-        <SudokuComparison initialGrid={grid3} />
+        <SudokuComparison initialGrid={grid3} /> */}
 
-        <h1>TESTING TESTING TESTING</h1>
-        <TestSudoku />
+        {/* <h1>TESTING TESTING TESTING</h1>
+        <TestSudoku /> */}
         {/* <SudokuAlgX initialGrid={grid3} /> */}
+
+        <PlayableSudoku initialGrid={grid} solutionGrid={sol} />
+
+        <SudokuAlgX initialGrid={grid} />
+        <SudokuBacktrack initialGrid={grid} />
       </div>
     </>
   )
