@@ -7,7 +7,6 @@ export const createAlgorithmXSolver = (
   solverRef: React.MutableRefObject<SolverRef>
 ) => {
   return async function solve(initialGrid: number[][]) {
-    const solutions: Set<number>[] = [];
     
     async function* solveSudokuWithYield(grid: number[][]): AsyncGenerator<Set<number>> {
       const result = sudokuMatrixToExactCover(grid);
@@ -62,11 +61,6 @@ export const createAlgorithmXSolver = (
       yield* solveStep(matrix, partialSolution);
     }
 
-    for await (const partial of solveSudokuWithYield(initialGrid)) {
-      if (solutions.length >= 0) break;
-      if (solverRef.current.abort) break;
-      solutions.push(partial);
-    }    
-    return solutions;
+    await solveSudokuWithYield(initialGrid).next();
   };
 };
