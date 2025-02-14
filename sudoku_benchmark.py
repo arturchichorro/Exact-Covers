@@ -137,6 +137,37 @@ def benchmark_sudokus_w_count(sudoku_strings):
 
     return df
 
+import time
+import pandas as pd
+
+def benchmark_alg_x_df(sudoku_strings):
+    results = []
+
+    for i, sudoku_string in enumerate(sudoku_strings):
+        start_time = time.perf_counter()
+        solution, nodes_alg_x = solve_sudoku_string_exact_cover_w_counts(sudoku_string)
+        translate_solution_to_sudoku(solution)
+        end_time = time.perf_counter()
+        alg_x_time = end_time - start_time
+
+        print(f"Solved {i+1}/{len(sudoku_strings)} with Algorithm X in {alg_x_time:.6f}s using {nodes_alg_x} nodes.")
+        
+        results.append({
+            "Sudoku #": i,
+            "Algorithm X Time (s)": alg_x_time,
+            "Algorithm X Nodes": nodes_alg_x,
+        })
+
+    df = pd.DataFrame(results)
+
+    df.to_csv("sudoku_alg_x_benchmark_results.csv", index=False)
+
+    print(df.head())
+
+    return df
+
+
+
 # sudoku_string = ".4.6.8...56.9...2.19724.3...8..97..1.3.1.6..5..95.346....35.1.8....6..43.73..96.2"
 # sudoku_string2 = "2.6.51.7.5.87.6..94.......1.49..58..375.481..82.3.97.51..6..9....48.32..7.2.....3"
 # diabolical_sudoku = "..43......5...91.4...1....6......8..61..9...5..8.23......2.753.5.....6.7...4.5..."
@@ -178,26 +209,9 @@ def benchmark_sudokus_w_count(sudoku_strings):
 
 # print(sudoku_strings)
 
-filename = "50.txt"
-lengths = count_nums_sudoku_strings(filename)
-print("Filled cells per sudoku:")
-for i in range(len(lengths)):
-    print(i+1, ": ", lengths[i])
-
-# with open(filename, "r") as file:
-#     sudoku_strings = [line.strip() for line in file if line.strip()]
-
-sudoku_strings = ["....9.412...47......65.29..4..7...2......87..58....6...2...5...8.......16..2...3."]
-r = sudoku_string_to_sudoku_grid(sudoku_strings[0])
-
-# df = benchmark_sudokus_w_count(sudoku_strings)
-# df = pd.read_csv("sudoku_benchmark_results.csv")
+filename = "puzzles.txt"
+with open(filename, "r") as file:
+    sudoku_strings = [line.strip() for line in file if line.strip()]
 
 
-# print(verify_alg_x(sudoku_strings))
-
-
-# with open(filename, "r") as file:
-#     sudoku_strings = [line.strip() for line in file if line.strip()]
-
-# benchmark_alg_x(sudoku_strings)
+benchmark_alg_x_df(sudoku_strings)
