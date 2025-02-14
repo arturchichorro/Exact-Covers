@@ -1,6 +1,6 @@
 import numpy as np
 from math import sqrt
-from alg_x import solve, choose_row, solve_and_count
+from alg_x import solve, choose_row, solve_and_count, solve_and_count_one_solution
 from sudoku_helper import print_sudoku_grid, sudoku_string_to_sudoku_grid
 
 def _one_constraint(row, size):
@@ -103,6 +103,16 @@ def translate_solution_to_sudoku(solutions):
     
     return result
 
+def translate_partial_sol_to_sudoku(psol):
+    sudo_string = ""
+    sorted_sol = sorted(psol)
+    for i, e in enumerate(sorted_sol):
+        if i == 0:
+            sudo_string += str(e)
+            continue
+        sudo_string += str(e % (9 * i)) if e % (9 * i) != 0 else "9"
+    return sudo_string
+
 def solve_sudoku_string_exact_cover_w_counts(sudoku_string):
     sudoku_matrix, partial_solution = sudoku_string_to_exact_cover(sudoku_string)
     solutions = []
@@ -112,3 +122,8 @@ def solve_sudoku_string_exact_cover_w_counts(sudoku_string):
 
     return solutions, node_counter[0]
 
+def solve_sudoku_string_exact_cover_w_counts_one_sol(sudoku_string):
+    sudoku_matrix, partial_solution = sudoku_string_to_exact_cover(sudoku_string)
+    node_counter = [0]
+    
+    return solve_and_count_one_solution(sudoku_matrix, partial_solution, node_counter), node_counter[0]

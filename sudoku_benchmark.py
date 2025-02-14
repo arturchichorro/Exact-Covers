@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import time
 import matplotlib.pyplot as plt
-from sudoku_alg_x import translate_solution_to_sudoku, solve_sudoku_string_exact_cover, solve_sudoku_string_exact_cover_w_counts, solve_sudoku_matrix_exact_cover
+from sudoku_alg_x import translate_solution_to_sudoku, solve_sudoku_string_exact_cover, solve_sudoku_string_exact_cover_w_counts, solve_sudoku_matrix_exact_cover, solve_sudoku_string_exact_cover_w_counts_one_sol, translate_partial_sol_to_sudoku
 from sudoku_backtracking import solve_sudoku_backtracking, solve_sudoku_backtracking_counting_nodes
 from sudoku_helper import sudoku_string_to_sudoku_grid, print_sudoku_string, print_sudoku_grid, count_nums_sudoku_strings, is_valid_solved_grid
 
@@ -137,9 +137,6 @@ def benchmark_sudokus_w_count(sudoku_strings):
 
     return df
 
-import time
-import pandas as pd
-
 def benchmark_alg_x_df(sudoku_strings):
     results = []
 
@@ -166,7 +163,31 @@ def benchmark_alg_x_df(sudoku_strings):
 
     return df
 
+def benchmark_alg_x_df_one_sol(sudoku_strings):
+    results = []
 
+    for i, sudoku_string in enumerate(sudoku_strings):
+        start_time = time.perf_counter()
+        psol, nodes_alg_x = solve_sudoku_string_exact_cover_w_counts_one_sol(sudoku_string)
+        translate_partial_sol_to_sudoku(psol)
+        end_time = time.perf_counter()
+        alg_x_time = end_time - start_time
+
+        print(f"Solved {i+1}/{len(sudoku_strings)} with Algorithm X in {alg_x_time:.6f}s using {nodes_alg_x} nodes.")
+        
+        results.append({
+            "Sudoku #": i,
+            "Algorithm X Time (s)": alg_x_time,
+            "Algorithm X Nodes": nodes_alg_x,
+        })
+
+    df = pd.DataFrame(results)
+
+    df.to_csv("sudoku_alg_x_benchmark_results.csv", index=False)
+
+    print(df.head())
+
+    return df
 
 # sudoku_string = ".4.6.8...56.9...2.19724.3...8..97..1.3.1.6..5..95.346....35.1.8....6..43.73..96.2"
 # sudoku_string2 = "2.6.51.7.5.87.6..94.......1.49..58..375.481..82.3.97.51..6..9....48.32..7.2.....3"
@@ -209,9 +230,17 @@ def benchmark_alg_x_df(sudoku_strings):
 
 # print(sudoku_strings)
 
+
+
 filename = "puzzles.txt"
 with open(filename, "r") as file:
     sudoku_strings = [line.strip() for line in file if line.strip()]
 
+# top_50_slowest = [45750, 21851, 45751, 41812, 41816, 30172, 48883, 34232, 23326, 20693, 41813, 39601, 41815, 41814, 48611, 12963, 45876, 28384, 44758, 14656, 33646, 40179, 16081, 46771, 14657, 4236, 16082, 46770, 48145, 25231, 34229, 20154, 42298, 18676, 46850, 46671, 13505, 17259, 6647, 14795, 19038, 1775, 20645, 20317, 43076, 20369, 25930, 45327, 29751, 10758]
 
-benchmark_alg_x_df(sudoku_strings)
+# filtered_sudoku = [sudoku_strings[i] for i in top_50_slowest]
+benchmark_alg_x_df_one_sol(sudoku_strings)
+
+# hardest = sudoku_string_to_sudoku_grid(sudoku_strings[top_50_slowest[0]])
+# print(hardest)
+# print_sudoku_grid(hardest)

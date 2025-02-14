@@ -63,3 +63,27 @@ def solve_and_count(matrix, partial_solution, solutions, node_counter):
         new_partial_solution.add(matrix[row_idx, 0])
         reduced_matrix = choose_row(matrix, row_idx)
         solve_and_count(reduced_matrix, new_partial_solution, solutions, node_counter)
+
+def solve_and_count_one_solution(matrix, partial_solution, node_counter):
+    node_counter[0] += 1
+    
+    rows, columns = matrix.shape
+    if columns == 1:
+        return partial_solution
+
+    column_sums = np.sum(matrix[:, 1:], axis=0)
+    min_col_idx = np.argmin(column_sums) + 1
+    candidate_rows = [r for r in range(rows) if matrix[r, min_col_idx] == 1]
+
+    if not candidate_rows:
+        return None
+
+    for row_idx in candidate_rows:
+        new_partial_solution = partial_solution.copy()
+        new_partial_solution.add(matrix[row_idx, 0])
+        reduced_matrix = choose_row(matrix, row_idx)
+        result = solve_and_count_one_solution(reduced_matrix, new_partial_solution, node_counter)
+        if result is not None:
+            return result
+        
+    return None
