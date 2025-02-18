@@ -44,12 +44,12 @@ def choose_row(matrix, row_idx):
     return np.delete(reduced_matrix, list(columns_to_delete), axis=1)
 
 def solve_and_count(matrix, partial_solution, solutions, node_counter):
-    node_counter[0] += 1
-    
     rows, columns = matrix.shape
     if columns == 1:
         solutions.append(partial_solution)
         return
+
+    node_counter[0] += 1
 
     column_sums = np.sum(matrix[:, 1:], axis=0)
     min_col_idx = np.argmin(column_sums) + 1
@@ -65,11 +65,11 @@ def solve_and_count(matrix, partial_solution, solutions, node_counter):
         solve_and_count(reduced_matrix, new_partial_solution, solutions, node_counter)
 
 def solve_and_count_one_solution(matrix, partial_solution, node_counter):
-    node_counter[0] += 1
-    
     rows, columns = matrix.shape
     if columns == 1:
         return partial_solution
+
+    node_counter[0] += 1
 
     column_sums = np.sum(matrix[:, 1:], axis=0)
     min_col_idx = np.argmin(column_sums) + 1
